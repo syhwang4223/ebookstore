@@ -14,8 +14,8 @@ import java.util.List;
 public class Order {
 
     @Id
-    @GeneratedValue//(strategy = GenerationType.IDENTITY)
-    @Column(name = "oredr_id")
+    @GeneratedValue
+    @Column(name = "order_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -23,9 +23,31 @@ public class Order {
     private Member member;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderBook> orderItems = new ArrayList<>();
+    private List<OrderLine> orderItems = new ArrayList<>();
 
     private LocalDateTime orderDateTime;
+
+    /**
+     * 연관관계 메서드
+     */
+    public void addOrderBook(OrderLine orderLine) {
+        orderItems.add(orderLine);
+        orderLine.setOrder(this);
+    }
+
+
+
+    /**
+     * 생성 메서드
+     */
+    public static Order createOrder(Cart cart, Member member) {
+        Order order = new Order();
+        order.setMember(member);
+
+        order.setOrderDateTime(LocalDateTime.now());
+
+        return order;
+    }
 
 
 }

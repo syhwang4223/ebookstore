@@ -20,4 +20,6 @@ public class Book {
     @Enumerated(EnumType.STRING)
     private Category category;
 
+
+
 }

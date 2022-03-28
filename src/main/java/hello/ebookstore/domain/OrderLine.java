@@ -7,15 +7,14 @@ import javax.persistence.*;
 
 @Entity
 @Getter @Setter
-@Table(name = "order_book")
-public class OrderBook {
+public class OrderLine {
 
     @Id @GeneratedValue
-    @Column(name = "order_book_id")
+    @Column(name = "order_line_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_id")
+    @JoinColumn(name = "book_id")
     private Book book;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -23,6 +22,14 @@ public class OrderBook {
     private Order order;
 
     private int orderPrice;
+
+    public static OrderLine createOrderLine(Book book, int orderPrice) {
+        OrderLine orderLine = new OrderLine();
+        orderLine.setBook(book);
+        orderLine.setOrderPrice(orderPrice);
+
+        return orderLine;
+    }
 
 
 }
