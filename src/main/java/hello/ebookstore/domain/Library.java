@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class Library {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "library_id")
     private Long id;
 

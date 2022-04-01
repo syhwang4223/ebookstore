@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -15,28 +16,34 @@ public class MemberRepository {
     @PersistenceContext
     private EntityManager em;
 
-    public void save(Member member) {
+    public Member save(Member member) {
         em.persist(member);
+        return member;
     }
 
-    public Member findOne(Long id) {
-        return em.find(Member.class, id);
+    public Optional<Member> findOne(Long id) {
+        return Optional.of(em.find(Member.class, id));
     }
 
-    public List<Member> findByEmail(String email) {
-        return em.createQuery("select m from Member m where m.emailAddress = :email", Member.class)
-                .getResultList();
+    public Optional<Member> findByEmail(String emailAddress) {
+        return em.createQuery("select m from Member m where m.emailAddress = :emailAddress", Member.class)
+                .setParameter("emailAddress", emailAddress)
+                .getResultList()
+                .stream().findAny();
     }
 
-    public List<Member> findByLoginId(String loginId) {
+    public Optional<Member> findByLoginId(String loginId) {
         return em.createQuery("select m from Member m where m.loginId = :loginId", Member.class)
-                .getResultList();
+                .setParameter("loginId", loginId)
+                .getResultList()
+                .stream().findAny();
     }
 
     public List<Member> findAll() {
         return em.createQuery("select m from Member m", Member.class)
                 .getResultList();
     }
+
 
 
 }

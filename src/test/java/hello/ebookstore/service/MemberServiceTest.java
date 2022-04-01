@@ -50,17 +50,5 @@ class MemberServiceTest {
         //then
     }
 
-    @Test
-    public void 로그인아이디로_회원찾기() throws Exception {
-        //given
-        Member member = createMember();
-        memberService.join(member);
-
-        //when
-        Member findMember = memberService.findByLoginId(member.getLoginId());
-
-        //then
-        assertThat(member.getLoginId()).isEqualTo(findMember.getLoginId());
-    }
 
 }
