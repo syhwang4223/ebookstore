@@ -30,6 +30,6 @@ public class CategoryRepository {
         return em.createQuery("select c from Category c where c.categoryName = :categoryName", Category.class)
                 .setParameter("categoryName", categoryName)
                 .getResultList();
-    }
+    } 
 
 }
