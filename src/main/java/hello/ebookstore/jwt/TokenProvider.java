@@ -3,6 +3,8 @@ package hello.ebookstore.jwt;
 
 
 import hello.ebookstore.dto.TokenDto;
+import hello.ebookstore.exception.InvalidRequestException;
+import hello.ebookstore.exception.NoAuthenticationException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -89,7 +91,7 @@ public class TokenProvider {
         Claims claims = parseClaims(accessToken);
 
         if (claims.get(AUTHORITIES_KEY) == null) {
-            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
+            throw new NoAuthenticationException("권한 정보가 없는 토큰입니다.");
         }
 
         // 클레임에서 권한 정보 가져오기

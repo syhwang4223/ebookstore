@@ -1,5 +1,6 @@
 package hello.ebookstore.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -33,7 +34,8 @@ public class Book {
     @Column(name = "likes")
     private Long like;
 
-    public void createBook(String title, String isbn, String imgUrl,
+    @Builder
+    public Book (String title, String isbn, String imgUrl,
                            String author, String publisher, Integer price,
                            LocalDate publicationDate, Category category) {
         this.title = title;
@@ -46,6 +48,8 @@ public class Book {
         this.category = category;
         this.like = 0L;
     }
+
+    protected Book(){}
 
 
 }

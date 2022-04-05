@@ -17,7 +17,7 @@ public class BookService {
     private final BookRepository bookRepository;
 
     @Transactional
-    public Long saveBook(Book book) {
+    public Long createBook(Book book) {
         bookRepository.save(book);
         return book.getId();
     }

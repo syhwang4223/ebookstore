@@ -68,7 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/reissue").permitAll()
                 .antMatchers(HttpMethod.GET, "/books/**").permitAll()
                 .anyRequest().authenticated()
-
+//                .anyRequest().permitAll()
 
                 // JwtSecurityConfig 클래스 적용
                 .and()

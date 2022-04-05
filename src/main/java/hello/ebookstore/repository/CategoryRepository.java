@@ -3,12 +3,15 @@ package hello.ebookstore.repository;
 import hello.ebookstore.domain.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
+@Transactional
 public class CategoryRepository {
 
     private final EntityManager em;
@@ -26,10 +29,11 @@ public class CategoryRepository {
         return em.find(Category.class, id);
     }
 
-    public List<Category> findByName(String categoryName) {
+    public Optional<Category> findByName(String categoryName) {
         return em.createQuery("select c from Category c where c.categoryName = :categoryName", Category.class)
                 .setParameter("categoryName", categoryName)
-                .getResultList();
-    } 
+                .getResultList()
+                .stream().findAny();
+    }
 
 }
