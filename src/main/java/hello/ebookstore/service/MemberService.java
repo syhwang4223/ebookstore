@@ -1,12 +1,15 @@
 package hello.ebookstore.service;
 
+import hello.ebookstore.domain.Cart;
 import hello.ebookstore.domain.Member;
 import hello.ebookstore.domain.RefreshToken;
 import hello.ebookstore.dto.*;
 import hello.ebookstore.exception.DuplicateException;
 import hello.ebookstore.exception.InvalidRequestException;
+import hello.ebookstore.exception.LoginFailException;
 import hello.ebookstore.exception.NoAuthenticationException;
 import hello.ebookstore.jwt.TokenProvider;
+import hello.ebookstore.repository.CartRepository;
 import hello.ebookstore.repository.MemberRepository;
 import hello.ebookstore.repository.RefreshTokenRepository;
 import hello.ebookstore.util.SecurityUtil;
@@ -41,8 +44,16 @@ public class MemberService {
     @Transactional
     public MemberResponseDto signup(@Valid MemberSignUpDto memberSignUpDto){
         validateDuplicateMember(memberSignUpDto);
+        validatePasswordConfirm(memberSignUpDto);
         Member member = memberSignUpDto.toMember(passwordEncoder);
+
         return MemberResponseDto.of(memberRepository.save(member));
+    }
+
+    private void validatePasswordConfirm(MemberSignUpDto memberSignUpDto) {
+        if (!memberSignUpDto.getPassword().equals(memberSignUpDto.getPasswordConfirm())) {
+            throw new RuntimeException("비밀번호를 다시 확인해주세요");
+        }
     }
 
     private void validateDuplicateMember(MemberSignUpDto memberSignUpDto) {
@@ -60,61 +71,26 @@ public class MemberService {
     @Transactional
     public TokenDto login(@Valid MemberLoginDto memberLoginDto) {
         log.info("memberService.login");
+
+        // 아이디, 비밀번호 확인
+        Member member = memberRepository.findByLoginId(memberLoginDto.getLoginId()).orElseThrow(() -> new LoginFailException("가입되지 않은 아이디입니다."));
+        if (!passwordEncoder.matches(memberLoginDto.getPassword(), member.getPassword())) {
+            throw new LoginFailException("비밀번호가 틀렸습니다");
+        }
+
+
         // 1. loginId/password 를 기반으로 Authentication 생성
-        UsernamePasswordAuthenticationToken authenticationToken = memberLoginDto.toAuthentication();
-
-        // 2. 실제로 검증이 이루어지는 부분
-        //    입력받은 비밀번호가 등록된 비밀번호와 일치하는지 확인한다
+//        UsernamePasswordAuthenticationToken authenticationToken = memberLoginDto.toAuthentication();
         //    authenticate 메서드가 실행이 될 때 CustomUserDetailsService 에서 만들었던 loadUserByUsername 메서드가 실행된다.
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+//        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        return tokenProvider.createToken(memberLoginDto.toAuthentication());
+
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
-        TokenDto tokenDto = tokenProvider.createToken(authentication);
-        // 4. RefreshToken 저장
-        RefreshToken refreshToken = RefreshToken.builder()
-                .key(authentication.getName())
-                .value(tokenDto.getRefreshToken())
-                .build();
 
-        refreshTokenRepository.save(refreshToken);
-        log.info("토큰발급");
-        // 5. 토큰 발급
-        return tokenDto;
+//        return tokenProvider.createToken(authentication);
 
     }
 
-    /**
-     * 토큰 재발행
-     */
-    @Transactional
-    public TokenDto reissue(TokenRequestDto tokenRequestDto) {
-
-        // 1. Refresh Token 검증
-        if (!tokenProvider.validateToken(tokenRequestDto.getRefreshToken())) {
-            throw new NoAuthenticationException("Refresh Token 이 유효하지 않습니다");
-        }
-
-        // 2. Access Token 에서 MemberId 가져오기
-        Authentication authentication = tokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
-        
-        // 3. 저장소에서 MemberId 를 기반으로 Refresh Token 값 가져옴
-        RefreshToken refreshToken = refreshTokenRepository.findByKey(authentication.getName())
-                .orElseThrow(() -> new InvalidRequestException("로그아웃 된 사용자입니다."));
-
-        // 4. Refresh Token 이 일치하는지 검사
-        if (!refreshToken.getValue().equals(tokenRequestDto.getRefreshToken())) {
-            throw new NoAuthenticationException("토큰의 유저 정보가 일치하지 않습니다");
-        }
-
-        // 5. 새로운 토큰 생성
-        TokenDto tokenDto = tokenProvider.createToken(authentication);
-
-        // 6. 저장소 정보 업데이트
-        RefreshToken newRefreshToken = refreshToken.updateValue(tokenDto.getRefreshToken());
-        refreshTokenRepository.save(newRefreshToken);
-
-        // 토큰 발급
-        return tokenDto;
-    }
 
     /**
      * 현재 로그인한 회원 정보 조회
@@ -123,16 +99,7 @@ public class MemberService {
     public MemberResponseDto getMyInfo() {
         return memberRepository.findOne(SecurityUtil.getCurrentMemberId())
                 .map(MemberResponseDto::of)
-                .orElseThrow(() -> new InvalidRequestException("유저 정보가 없습니다."));
-    }
-
-
-
-    /**
-     * 전체 회원 조회
-     */
-    public List<Member> findMembers() {
-        return memberRepository.findAll();
+                .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
     }
 
 

@@ -22,6 +22,7 @@ public class InitData {
      */
     @PostConstruct
     public void init() {
+
         Category category1 = Category.createCategory("romance");
         Category category2 = Category.createCategory("romance-fantasy");
         Category category3 = Category.createCategory("fantasy");
@@ -39,11 +40,24 @@ public class InitData {
                 .publicationDate(LocalDate.of(1997, 6,26))
                 .category(category3)
                 .publisher("문학수첩")
-                .isbn("978-89-8392-773-6")
+                .isbn("9781781106303")
                 .imgUrl("https://ww.namu.la/s/86a3fb2653e762f585b9c0ba596ac65b948a772f00af58144844c11cf61f948f07d0669c91c0b8bceb1f3f717c8d3caa07e11189c5a9aefc6f0fc0338ff942dcdc9f7a0aed522e761a42586b8fab2e8a12cb32be8104b40052d2118e5e021c010b067cb705298dc29ed1366c887e59ab")
                 .build();
 
+
+        Book book2 = Book.builder()
+                .title("눈물을 마시는 새")
+                .author("이영도")
+                .price(15000)
+                .publicationDate(LocalDate.of(2003, 2,27))
+                .category(category3)
+                .publisher("황금가지")
+                .isbn("9788960176003")
+                .imgUrl("https://img.ridicdn.net/cover/682000457/xxlarge#1")
+                .build();
+
         bookService.createBook(book1);
+        bookService.createBook(book2);
     }
 
 }

@@ -3,8 +3,6 @@ package hello.ebookstore.jwt;
 
 
 import hello.ebookstore.dto.TokenDto;
-import hello.ebookstore.exception.InvalidRequestException;
-import hello.ebookstore.exception.NoAuthenticationException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -22,7 +20,6 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -33,10 +30,8 @@ import java.util.stream.Collectors;
 @Component
 public class TokenProvider {
 
-    private static final String AUTHORITIES_KEY = "auth";
-    private static final String BEARER_TYPE = "bearer";
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;            //30분
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;  //7일
+    private static final String AUTHORITIES_KEY = "auth";
 
     private Key key;
 
@@ -54,45 +49,32 @@ public class TokenProvider {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
-        
+
         long now = (new Date()).getTime();
-        
-        // Access Token 생성
-        // 유저와 권한정보, 만료시간, 해싱 알고리즘과 키
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME); // acess token 만료 시간
-        String accessToken = Jwts.builder()
+
+        // JWT 생성
+
+        return new TokenDto(Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
                 .setExpiration(accessTokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS512)
-                .compact();
-        
-        // Refresh Token 생성
-        // 만료시간, 해싱 알고리즘 과 키
-        String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
-                .signWith(key, SignatureAlgorithm.HS512)
-                .compact();
+                .compact());
 
-        return TokenDto.builder()
-                .grantType(BEARER_TYPE)
-                .accessToken(accessToken)
-                .accessTokenExpiresIn(accessTokenExpiresIn.getTime())
-                .refreshToken(refreshToken)
-                .build();
     }
 
     /**
      * 토큰에 담겨 있는 정보를 받아 유저 정보를 리턴한다
      */
-    public Authentication getAuthentication(String accessToken) {
+    public Authentication getAuthentication(String token) {
 
         // 토큰 복호화
-        Claims claims = parseClaims(accessToken);
-
-        if (claims.get(AUTHORITIES_KEY) == null) {
-            throw new NoAuthenticationException("권한 정보가 없는 토큰입니다.");
-        }
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
 
         // 클레임에서 권한 정보 가져오기
         Collection<? extends GrantedAuthority> authorities =
@@ -101,9 +83,9 @@ public class TokenProvider {
                         .collect(Collectors.toList());
 
         // UserDetails 객체를 만들어서 Authentication 리턴
-        UserDetails principal = new User(claims.getSubject(), "", authorities);
+        UserDetails userDetails = new User(claims.getSubject(), "", authorities);
 
-        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+        return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
     }
 
     /**
@@ -123,19 +105,6 @@ public class TokenProvider {
             log.info("JWT 토큰이 잘못되었습니다.");
         }
         return false;
-    }
-    
-
-    private Claims parseClaims(String accessToken) {
-        try {
-            return Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(accessToken)
-                    .getBody();
-        } catch (ExpiredJwtException e) {
-            return e.getClaims();
-        }
     }
 
 }

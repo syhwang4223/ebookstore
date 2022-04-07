@@ -1,5 +1,8 @@
 package hello.ebookstore.jwt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import hello.ebookstore.exception.ErrorResult;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -14,10 +17,17 @@ import java.io.IOException;
  * 401 SC_UNAUTHORIZED 응답 리턴
  */
 @Component
+@Slf4j
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
+    private ObjectMapper objectMapper = new ObjectMapper();
+
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
+
+        response.setContentType("application/json;charset=UTF-8");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.getWriter().write(objectMapper.writeValueAsString(new ErrorResult("로그인이 필요합니다.")));
+
     }
 }

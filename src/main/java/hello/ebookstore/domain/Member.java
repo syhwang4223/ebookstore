@@ -2,6 +2,7 @@ package hello.ebookstore.domain;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@ToString
+@ToString @Setter
 public class Member {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +32,10 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
+
     @Builder
     public Member(String loginId, String password, String emailAddress, Authority authority) {
         this.loginId = loginId;
@@ -38,6 +43,8 @@ public class Member {
         this.emailAddress = emailAddress;
         this.authority = authority;
         joinDate = LocalDateTime.now();
+        cart = new Cart();
+        cart.setMember(this);
     }
 
     protected Member() {

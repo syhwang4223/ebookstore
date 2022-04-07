@@ -9,6 +9,7 @@ import hello.ebookstore.service.MemberService;
 import hello.ebookstore.dto.MemberSignUpDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,24 +24,23 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
-    private final CartService cartService;
 
 
 
     /**
      * 전체 회원 조회
      */
-    @GetMapping
-    public List<Member> findAllMembers() {
-        return memberService.findMembers();
-    }
+//        @GetMapping
+//        public List<Member> findAllMembers() {
+//            return memberService.findMembers();
+//        }
 
     /**
-     * 회원 ID로 조회
+     * 현재 로그인 중인 회원 정보 조회
      */
     @GetMapping("/myInfo")
-    public MemberResponseDto getMyInfo() {
-        return memberService.getMyInfo();
+    public ResponseEntity<MemberResponseDto> getMyInfo() {
+        return ResponseEntity.ok(memberService.getMyInfo());
     }
 
 

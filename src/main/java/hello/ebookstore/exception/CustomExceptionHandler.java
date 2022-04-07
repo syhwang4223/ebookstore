@@ -32,12 +32,5 @@ public class CustomExceptionHandler {
         return new ResponseEntity<>(errorResult, HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler
-    public ResponseEntity<ErrorResult> noAuthenticationExHandle(NoAuthenticationException e) {
-        log.error("[exceptionHandler] ", e);
-        ErrorResult errorResult = new ErrorResult(e.getMessage());
-        return new ResponseEntity<>(errorResult, HttpStatus.UNAUTHORIZED);
-    }
-
 
 }

@@ -9,21 +9,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 public class Cart {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cart_id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @OneToOne(mappedBy = "cart")
     private Member member;
-    
-    public static Cart createCart(Member member) {
-        Cart cart = new Cart();
-        cart.setMember(member);
-        return cart;
+
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
+    private List<CartItem> cartItems = new ArrayList<>();
+
+
+
+    // 연관관계 메서드
+    public void addCartItem(CartItem cartItem) {
+        cartItems.add(cartItem);
+        cartItem.setCart(this);
     }
+
+    public void setMember(Member member) {
+        this.member = member;
+        member.setCart(this);
+    }
+
+
 
 }

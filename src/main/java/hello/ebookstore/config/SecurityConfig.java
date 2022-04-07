@@ -34,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) {
         web
                 .ignoring()
-                .antMatchers("/h2-console/**", "/favicon.ico"); // h2-console 은 스프링 시큐리티가 적용되지 않도록 설정
+                .antMatchers("/h2-console/**", "/favicon.ico", "/error"); // h2-console 은 스프링 시큐리티가 적용되지 않도록 설정
     }
 
     @Override
@@ -44,8 +44,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 // Exception 을 핸들링할 때 우리가 만들었던 클래스들을 추가
                 .exceptionHandling()
-//                .accessDeniedHandler(jwtAccessDeniedHandler)
-//                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .accessDeniedHandler(jwtAccessDeniedHandler)
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
 
                 // h2-console 설정
                 .and()

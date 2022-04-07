@@ -48,4 +48,9 @@ public class BookController {
             throw new InvalidRequestException("존재하지 않는 책입니다: bookId = " + bookId);
         }
     }
+
+    @GetMapping("/{bookId}/cart")
+    public void addToCart() {
+
+    }
 }
