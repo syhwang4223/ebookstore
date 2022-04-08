@@ -8,6 +8,8 @@ import lombok.ToString;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -32,9 +34,14 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cart_id")
-    private Cart cart;
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<CartItem> cartItems = new ArrayList<>();
+
+
+    public void addCartItem(CartItem cartItem) {
+        cartItems.add(cartItem);
+        cartItem.setMember(this);
+    }
 
     @Builder
     public Member(String loginId, String password, String emailAddress, Authority authority) {
@@ -43,8 +50,6 @@ public class Member {
         this.emailAddress = emailAddress;
         this.authority = authority;
         joinDate = LocalDateTime.now();
-        cart = new Cart();
-        cart.setMember(this);
     }
 
     protected Member() {

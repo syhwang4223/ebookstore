@@ -1,21 +1,21 @@
 package hello.ebookstore.controller;
 
-import hello.ebookstore.domain.Cart;
+import hello.ebookstore.domain.Book;
+import hello.ebookstore.domain.CartItem;
 import hello.ebookstore.domain.Member;
 import hello.ebookstore.dto.MemberResponseDto;
-import hello.ebookstore.exception.LoginFailException;
-import hello.ebookstore.service.CartService;
+import hello.ebookstore.exception.NoLoginMemberException;
+import hello.ebookstore.repository.MemberRepository;
+import hello.ebookstore.service.BookService;
 import hello.ebookstore.service.MemberService;
-import hello.ebookstore.dto.MemberSignUpDto;
+import hello.ebookstore.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @Slf4j
@@ -23,8 +23,9 @@ import java.util.List;
 @RequestMapping("/members")
 public class MemberController {
 
+    private final MemberRepository memberRepository;
     private final MemberService memberService;
-
+    private final BookService bookService;
 
 
     /**
@@ -44,5 +45,14 @@ public class MemberController {
     }
 
 
+    @GetMapping("/cart/{bookId}")
+    public void addToCart(@PathVariable Long bookId) {
+        bookService.addToCart(bookId);
+    }
+
+    @GetMapping("/cart")
+    public List<CartItem> getCart() {
+        return bookService.getCart();
+    }
 
 }

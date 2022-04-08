@@ -30,7 +30,7 @@ public class CategoryRepository {
     }
 
     public Optional<Category> findByName(String categoryName) {
-        return em.createQuery("select c from Category c where c.categoryName = :categoryName", Category.class)
+        return em.createQuery("select c from Category c where c.name = :categoryName", Category.class)
                 .setParameter("categoryName", categoryName)
                 .getResultList()
                 .stream().findAny();

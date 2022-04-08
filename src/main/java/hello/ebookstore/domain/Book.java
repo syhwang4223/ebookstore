@@ -2,13 +2,14 @@ package hello.ebookstore.domain;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Getter
+@Getter @Setter
 @ToString
 public class Book {
 
@@ -17,10 +18,11 @@ public class Book {
     private Long id;
 
     private String title;
+
     @Column(unique = true)
     private String isbn;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
 
@@ -47,6 +49,7 @@ public class Book {
         this.publicationDate = publicationDate;
         this.category = category;
         this.like = 0L;
+
     }
 
     protected Book(){}

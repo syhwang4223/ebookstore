@@ -1,10 +1,16 @@
 package hello.ebookstore.controller;
 
 import hello.ebookstore.domain.Book;
+import hello.ebookstore.domain.CartItem;
 import hello.ebookstore.domain.Category;
+import hello.ebookstore.domain.Member;
+import hello.ebookstore.dto.BookDto;
 import hello.ebookstore.exception.InvalidRequestException;
 import hello.ebookstore.repository.CategoryRepository;
+import hello.ebookstore.repository.MemberRepository;
 import hello.ebookstore.service.BookService;
+import hello.ebookstore.service.MemberService;
+import hello.ebookstore.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -25,19 +31,14 @@ public class BookController {
     public List<Book> getAllBooks(@RequestParam(required = false, name = "category") String categoryName) {
 
         if (categoryName != null) {
-            Optional<Category> category = categoryRepository.findByName(categoryName);
-            return bookService.findByCategory(category.orElseThrow(() -> new InvalidRequestException("존재하지 않는 카테고리입니다")));
+            Category category = categoryRepository.findByName(categoryName)
+                    .orElseThrow(() -> new InvalidRequestException("존재하지 않는 카테고리입니다."));
+            return bookService.findByCategory(category);
+//            return bookService.findByCategory(category.orElseThrow(() -> new InvalidRequestException("존재하지 않는 카테고리입니다")));
         } else {
             return bookService.findBooks();
         }
     }
-
-
-//    @GetMapping
-//    public List<Book> getAllBooks() {
-//        return bookService.findBooks();
-
-//    }
 
     @GetMapping("/{bookId}")
     public Book getBook(@PathVariable("bookId") Long bookId) {
@@ -49,8 +50,4 @@ public class BookController {
         }
     }
 
-    @GetMapping("/{bookId}/cart")
-    public void addToCart() {
-
-    }
 }

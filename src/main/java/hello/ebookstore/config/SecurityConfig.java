@@ -63,9 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 토큰이 없는 상태에서 요청이 들어오기 때문에 permitAll 설정
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/signup").permitAll()
-                .antMatchers(HttpMethod.POST, "/login").permitAll()
-                .antMatchers(HttpMethod.POST, "/reissue").permitAll()
+                .antMatchers("/auth/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/books/**").permitAll()
                 .anyRequest().authenticated()
 //                .anyRequest().permitAll()

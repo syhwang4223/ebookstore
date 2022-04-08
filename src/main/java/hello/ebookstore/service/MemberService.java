@@ -1,17 +1,11 @@
 package hello.ebookstore.service;
 
-import hello.ebookstore.domain.Cart;
 import hello.ebookstore.domain.Member;
-import hello.ebookstore.domain.RefreshToken;
 import hello.ebookstore.dto.*;
 import hello.ebookstore.exception.DuplicateException;
-import hello.ebookstore.exception.InvalidRequestException;
 import hello.ebookstore.exception.LoginFailException;
-import hello.ebookstore.exception.NoAuthenticationException;
 import hello.ebookstore.jwt.TokenProvider;
-import hello.ebookstore.repository.CartRepository;
 import hello.ebookstore.repository.MemberRepository;
-import hello.ebookstore.repository.RefreshTokenRepository;
 import hello.ebookstore.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,7 +29,6 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
-    private final RefreshTokenRepository refreshTokenRepository;
 
     /**
      * 회원 가입
@@ -80,14 +72,13 @@ public class MemberService {
 
 
         // 1. loginId/password 를 기반으로 Authentication 생성
-//        UsernamePasswordAuthenticationToken authenticationToken = memberLoginDto.toAuthentication();
+        UsernamePasswordAuthenticationToken authenticationToken = memberLoginDto.toAuthentication();
         //    authenticate 메서드가 실행이 될 때 CustomUserDetailsService 에서 만들었던 loadUserByUsername 메서드가 실행된다.
-//        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        return tokenProvider.createToken(memberLoginDto.toAuthentication());
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
 
-//        return tokenProvider.createToken(authentication);
+        return tokenProvider.createToken(authentication);
 
     }
 
