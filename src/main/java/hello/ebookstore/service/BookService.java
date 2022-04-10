@@ -4,7 +4,7 @@ import hello.ebookstore.domain.Book;
 import hello.ebookstore.domain.CartItem;
 import hello.ebookstore.domain.Category;
 import hello.ebookstore.domain.Member;
-import hello.ebookstore.dto.BookDto;
+import hello.ebookstore.dto.BookResponseDto;
 import hello.ebookstore.exception.NoLoginMemberException;
 import hello.ebookstore.repository.BookRepository;
 import hello.ebookstore.repository.MemberRepository;

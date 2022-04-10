@@ -15,8 +15,11 @@ public class MemberResponseDto {
     private String emailAddress;
     private LocalDateTime joinDate;
 
-    public static MemberResponseDto of(Member member) {
-        return new MemberResponseDto(member.getLoginId(), member.getEmailAddress(), member.getJoinDate());
+    public MemberResponseDto(Member member) {
+
+        loginId = member.getLoginId();
+        emailAddress = member.getEmailAddress();
+        joinDate = member.getJoinDate();
     }
 
 }

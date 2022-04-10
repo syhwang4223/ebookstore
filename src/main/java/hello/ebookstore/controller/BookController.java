@@ -1,22 +1,17 @@
 package hello.ebookstore.controller;
 
-import hello.ebookstore.domain.Book;
-import hello.ebookstore.domain.CartItem;
 import hello.ebookstore.domain.Category;
-import hello.ebookstore.domain.Member;
-import hello.ebookstore.dto.BookDto;
+import hello.ebookstore.dto.BookResponseDto;
 import hello.ebookstore.exception.InvalidRequestException;
 import hello.ebookstore.repository.CategoryRepository;
-import hello.ebookstore.repository.MemberRepository;
 import hello.ebookstore.service.BookService;
-import hello.ebookstore.service.MemberService;
-import hello.ebookstore.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,26 +23,27 @@ public class BookController {
     private final CategoryRepository categoryRepository;
 
     @GetMapping
-    public List<Book> getAllBooks(@RequestParam(required = false, name = "category") String categoryName) {
+    public List<BookResponseDto> getAllBooks(@RequestParam(required = false, name = "category") String categoryName) {
 
         if (categoryName != null) {
             Category category = categoryRepository.findByName(categoryName)
                     .orElseThrow(() -> new InvalidRequestException("존재하지 않는 카테고리입니다."));
-            return bookService.findByCategory(category);
+            return bookService.findByCategory(category).stream()
+                    .map(BookResponseDto::new)
+                    .collect(Collectors.toList());
 //            return bookService.findByCategory(category.orElseThrow(() -> new InvalidRequestException("존재하지 않는 카테고리입니다")));
         } else {
-            return bookService.findBooks();
+            return bookService.findBooks().stream()
+                    .map(BookResponseDto::new)
+                    .collect(Collectors.toList());
         }
     }
 
     @GetMapping("/{bookId}")
-    public Book getBook(@PathVariable("bookId") Long bookId) {
-        Book book = bookService.findOne(bookId);
-        if (book != null) {
-            return bookService.findOne(bookId);
-        } else {
-            throw new InvalidRequestException("존재하지 않는 책입니다: bookId = " + bookId);
-        }
+    public ResponseEntity<BookResponseDto> getBook(@PathVariable("bookId") Long bookId) {
+        BookResponseDto bookResponseDto = new BookResponseDto(bookService.findOne(bookId));
+
+        return ResponseEntity.ok(bookResponseDto);
     }
 
 }

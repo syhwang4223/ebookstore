@@ -34,23 +34,24 @@ public class MemberService {
      * 회원 가입
      */
     @Transactional
-    public MemberResponseDto signup(@Valid MemberSignUpDto memberSignUpDto){
-        validateDuplicateMember(memberSignUpDto);
-        validatePasswordConfirm(memberSignUpDto);
-        Member member = memberSignUpDto.toMember(passwordEncoder);
+    public MemberResponseDto signup(@Valid SignUpRequestDto signUpRequestDto){
+        validateDuplicateMember(signUpRequestDto);
+        validatePasswordConfirm(signUpRequestDto);
+        Member member = signUpRequestDto.toMember(passwordEncoder);
+        memberRepository.save(member);
 
-        return MemberResponseDto.of(memberRepository.save(member));
+        return new MemberResponseDto(member);
     }
 
-    private void validatePasswordConfirm(MemberSignUpDto memberSignUpDto) {
-        if (!memberSignUpDto.getPassword().equals(memberSignUpDto.getPasswordConfirm())) {
+    private void validatePasswordConfirm(SignUpRequestDto signUpRequestDto) {
+        if (!signUpRequestDto.getPassword().equals(signUpRequestDto.getPasswordConfirm())) {
             throw new RuntimeException("비밀번호를 다시 확인해주세요");
         }
     }
 
-    private void validateDuplicateMember(MemberSignUpDto memberSignUpDto) {
-        Optional<Member> byLoginId = memberRepository.findByLoginId(memberSignUpDto.getLoginId());
-        Optional<Member> byEmail = memberRepository.findByEmail(memberSignUpDto.getEmailAddress());
+    private void validateDuplicateMember(SignUpRequestDto signUpRequestDto) {
+        Optional<Member> byLoginId = memberRepository.findByLoginId(signUpRequestDto.getLoginId());
+        Optional<Member> byEmail = memberRepository.findByEmail(signUpRequestDto.getEmailAddress());
         if (byLoginId.isPresent() | byEmail.isPresent()) {
             throw new DuplicateException("중복 아이디 또는 이메일이 존재합니다.");
         }
@@ -61,18 +62,18 @@ public class MemberService {
      * 로그인
      */
     @Transactional
-    public TokenDto login(@Valid MemberLoginDto memberLoginDto) {
+    public TokenDto login(@Valid LoginRequestDto loginRequestDto) {
         log.info("memberService.login");
 
         // 아이디, 비밀번호 확인
-        Member member = memberRepository.findByLoginId(memberLoginDto.getLoginId()).orElseThrow(() -> new LoginFailException("가입되지 않은 아이디입니다."));
-        if (!passwordEncoder.matches(memberLoginDto.getPassword(), member.getPassword())) {
+        Member member = memberRepository.findByLoginId(loginRequestDto.getLoginId()).orElseThrow(() -> new LoginFailException("가입되지 않은 아이디입니다."));
+        if (!passwordEncoder.matches(loginRequestDto.getPassword(), member.getPassword())) {
             throw new LoginFailException("비밀번호가 틀렸습니다");
         }
 
 
         // 1. loginId/password 를 기반으로 Authentication 생성
-        UsernamePasswordAuthenticationToken authenticationToken = memberLoginDto.toAuthentication();
+        UsernamePasswordAuthenticationToken authenticationToken = loginRequestDto.toAuthentication();
         //    authenticate 메서드가 실행이 될 때 CustomUserDetailsService 에서 만들었던 loadUserByUsername 메서드가 실행된다.
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
@@ -89,7 +90,7 @@ public class MemberService {
      */
     public MemberResponseDto getMyInfo() {
         return memberRepository.findOne(SecurityUtil.getCurrentMemberId())
-                .map(MemberResponseDto::of)
+                .map(MemberResponseDto::new)
                 .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
     }
 
