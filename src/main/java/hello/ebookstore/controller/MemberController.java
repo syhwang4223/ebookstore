@@ -5,8 +5,7 @@ import hello.ebookstore.dto.LoginRequestDto;
 import hello.ebookstore.dto.MemberResponseDto;
 import hello.ebookstore.dto.SignUpRequestDto;
 import hello.ebookstore.dto.TokenDto;
-import hello.ebookstore.repository.MemberRepository;
-import hello.ebookstore.service.BookService;
+import hello.ebookstore.service.CartService;
 import hello.ebookstore.service.MemberService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,7 @@ import java.util.stream.Collectors;
 public class MemberController {
 
     private final MemberService memberService;
-    private final BookService bookService;
+    private final CartService cartService;
 
 
     @PostMapping("/signup")
@@ -49,16 +48,28 @@ public class MemberController {
     }
 
 
+    /**
+     *  카트 기능
+     */
+    
     // 카트에 책 담기
     @PostMapping("/cart/{bookId}")
-    public void addToCart(@PathVariable Long bookId) {
-        bookService.addToCart(bookId);
+    public String addToCart(@PathVariable Long bookId) {
+        cartService.addToCart(bookId);
+        return "ok";
+    }
+
+    // 카트에서 책 삭제
+    @DeleteMapping("/cart/{bookId}")
+    public String outFromCart(@PathVariable Long bookId) {
+        cartService.outFromCart(bookId);
+        return "ok";
     }
 
     // 카트에 담긴 책 목록 조회
     @GetMapping("/cart")
     public List<CartItemDto> getCart() {
-        return bookService.getCart().stream()
+        return cartService.getCart().stream()
                 .map(CartItemDto::new)
                 .collect(Collectors.toList());
     }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -18,8 +19,8 @@ public class BookRepository {
         em.persist(book);
     }
 
-    public Book findOne(Long id) {
-        return em.find(Book.class, id);
+    public Optional<Book> findOne(Long id) {
+        return Optional.of(em.find(Book.class, id));
     }
 
     public List<Book> findAll() {

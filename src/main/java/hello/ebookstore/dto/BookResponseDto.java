@@ -11,6 +11,8 @@ import java.time.LocalDate;
 @ToString
 public class BookResponseDto {
 
+    private Long id;
+
     private String title;
     private String isbn;
     private String imgUrl;
@@ -24,17 +26,14 @@ public class BookResponseDto {
     private LocalDate publicationDate;
 
     public BookResponseDto(Book book) {
-        this.title = book.getTitle();
-        this.isbn = book.getIsbn();
-        this.imgUrl = book.getImgUrl();
-
-        this.category = book.getCategory().getName();
-
-        this.author = book.getAuthor();
-        ;
-        this.publisher = book.getPublisher();
-        ;
-        this.price = book.getPrice();
-        this.publicationDate = book.getPublicationDate();
+        id = book.getId();
+        title = book.getTitle();
+        isbn = book.getIsbn();
+        imgUrl = book.getImgUrl();
+        category = book.getCategory().getName();
+        author = book.getAuthor();
+        publisher = book.getPublisher();
+        price = book.getPrice();
+        publicationDate = book.getPublicationDate();
     }
 }

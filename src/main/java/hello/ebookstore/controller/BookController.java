@@ -2,7 +2,7 @@ package hello.ebookstore.controller;
 
 import hello.ebookstore.domain.Category;
 import hello.ebookstore.dto.BookResponseDto;
-import hello.ebookstore.exception.InvalidRequestException;
+import hello.ebookstore.exception.BadRequestException;
 import hello.ebookstore.repository.CategoryRepository;
 import hello.ebookstore.service.BookService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class BookController {
 
         if (categoryName != null) {
             Category category = categoryRepository.findByName(categoryName)
-                    .orElseThrow(() -> new InvalidRequestException("존재하지 않는 카테고리입니다."));
+                    .orElseThrow(() -> new BadRequestException("존재하지 않는 카테고리입니다."));
             return bookService.findByCategory(category).stream()
                     .map(BookResponseDto::new)
                     .collect(Collectors.toList());

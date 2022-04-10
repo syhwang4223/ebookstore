@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class CustomExceptionHandler {
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResult> invalidReqExHandle(InvalidRequestException e) {
+    public ResponseEntity<ErrorResult> invalidReqExHandle(BadRequestException e) {
         log.error("[exceptionHandler] ", e);
         ErrorResult errorResult = new ErrorResult(e.getMessage());
         return new ResponseEntity<>(errorResult, HttpStatus.BAD_REQUEST);
