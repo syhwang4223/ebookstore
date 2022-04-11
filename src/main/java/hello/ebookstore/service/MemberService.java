@@ -2,6 +2,7 @@ package hello.ebookstore.service;
 
 import hello.ebookstore.domain.Member;
 import hello.ebookstore.dto.*;
+import hello.ebookstore.exception.BadRequestException;
 import hello.ebookstore.exception.DuplicateException;
 import hello.ebookstore.exception.LoginFailException;
 import hello.ebookstore.jwt.TokenProvider;
@@ -45,7 +46,7 @@ public class MemberService {
 
     private void validatePasswordConfirm(SignUpRequestDto signUpRequestDto) {
         if (!signUpRequestDto.getPassword().equals(signUpRequestDto.getPasswordConfirm())) {
-            throw new RuntimeException("비밀번호를 다시 확인해주세요");
+            throw new BadRequestException("비밀번호를 다시 확인해주세요");
         }
     }
 

@@ -2,6 +2,7 @@ package hello.ebookstore.repository;
 
 import hello.ebookstore.domain.Book;
 import hello.ebookstore.domain.Category;
+import hello.ebookstore.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -19,8 +20,12 @@ public class BookRepository {
         em.persist(book);
     }
 
-    public Optional<Book> findOne(Long id) {
-        return Optional.of(em.find(Book.class, id));
+    public Book findOne(Long id) {
+        Book book = em.find(Book.class, id);
+        if (book == null) {
+            throw new BadRequestException("존재하지 않는 책입니다. bookId : " + id);
+        }
+        return book;
     }
 
     public List<Book> findAll() {
