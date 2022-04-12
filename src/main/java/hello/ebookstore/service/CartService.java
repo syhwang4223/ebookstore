@@ -60,9 +60,10 @@ public class CartService {
 
     }
 
-    public List<CartItem> getCart() {
+    public List<CartItem> getCartItems() {
         Long memberId = SecurityUtil.getCurrentMemberId();
         Member member = memberRepository.findOne(memberId).orElseThrow(() -> new NoLoginMemberException("로그인 유저 정보가 없습니다."));
         return member.getCartItems();
     }
+
 }

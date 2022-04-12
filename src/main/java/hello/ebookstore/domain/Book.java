@@ -34,12 +34,12 @@ public class Book {
     private LocalDate publicationDate;
 
     @Column(name = "likes")
-    private Long like;
+    private int like;
 
     @Builder
-    public Book (String title, String isbn, String imgUrl,
-                           String author, String publisher, Integer price,
-                           LocalDate publicationDate, Category category) {
+    public Book (String title, String author, Integer price, String isbn,
+                 LocalDate publicationDate, String publisher, String imgUrl,
+                 Category category) {
         this.title = title;
         this.isbn = isbn;
         this.imgUrl = imgUrl;
@@ -48,7 +48,7 @@ public class Book {
         this.price = price;
         this.publicationDate = publicationDate;
         this.category = category;
-        this.like = 0L;
+        this.like = 0;
 
     }
 

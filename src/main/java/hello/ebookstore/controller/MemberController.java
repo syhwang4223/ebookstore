@@ -69,7 +69,7 @@ public class MemberController {
     // 카트에 담긴 책 목록 조회
     @GetMapping("/cart")
     public List<CartItemDto> getCart() {
-        return cartService.getCart().stream()
+        return cartService.getCartItems().stream()
                 .map(CartItemDto::new)
                 .collect(Collectors.toList());
     }

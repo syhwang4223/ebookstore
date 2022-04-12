@@ -3,6 +3,8 @@ spring:
   h2:
     console:
       enabled: true
+      settings:
+        web-allow-others: true
 
   datasource:
     url: jdbc:h2:mem:testdb
@@ -18,6 +20,7 @@ spring:
       hibernate:
         format_sql: true
         show_sql: true
+    defer-datasource-initialization: true
 
 logging:
   level:
