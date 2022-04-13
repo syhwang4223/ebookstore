@@ -1,10 +1,7 @@
 package hello.ebookstore.controller;
 
 import hello.ebookstore.domain.CartItem;
-import hello.ebookstore.dto.LoginRequestDto;
-import hello.ebookstore.dto.MemberResponseDto;
-import hello.ebookstore.dto.SignUpRequestDto;
-import hello.ebookstore.dto.TokenDto;
+import hello.ebookstore.dto.*;
 import hello.ebookstore.service.CartService;
 import hello.ebookstore.service.MemberService;
 import lombok.Getter;
@@ -68,25 +65,11 @@ public class MemberController {
 
     // 카트에 담긴 책 목록 조회
     @GetMapping("/cart")
-    public List<CartItemDto> getCart() {
-        return cartService.getCartItems().stream()
-                .map(CartItemDto::new)
-                .collect(Collectors.toList());
+    public CartDto getCart() {
+        return new CartDto(cartService.getCart());
     }
 
-    @Getter
-    static class CartItemDto {
 
-        private String title;
-        private String author;
-        private int price;
-
-        public CartItemDto(CartItem cartItem) {
-            title = cartItem.getBook().getTitle();
-            author = cartItem.getBook().getAuthor();
-            price = cartItem.getBook().getPrice();
-        }
-    }
 
 
 }

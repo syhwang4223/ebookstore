@@ -34,14 +34,12 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<CartItem> cartItems = new ArrayList<>();
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
 
 
-    public void addCartItem(CartItem cartItem) {
-        cartItems.add(cartItem);
-        cartItem.setMember(this);
-    }
+
 
     @Builder
     public Member(String loginId, String password, String emailAddress, Authority authority) {
@@ -50,6 +48,7 @@ public class Member {
         this.emailAddress = emailAddress;
         this.authority = authority;
         joinDate = LocalDateTime.now();
+        cart = new Cart();
     }
 
     protected Member() {

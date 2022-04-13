@@ -1,6 +1,7 @@
 package hello.ebookstore.service;
 
 import hello.ebookstore.domain.Book;
+import hello.ebookstore.domain.Cart;
 import hello.ebookstore.domain.CartItem;
 import hello.ebookstore.domain.Member;
 import hello.ebookstore.exception.BadRequestException;
@@ -33,25 +34,26 @@ public class CartService {
 
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         Member member = memberRepository.findOne(currentMemberId).orElseThrow(() -> new NoLoginMemberException("로그인이 필요합니다"));
+        Cart cart = member.getCart();
 
-        for (CartItem item : member.getCartItems()) {
+        for (CartItem item : cart.getCartItems()) {
             if (item.getBook().getId().equals(bookId)) {
                 throw new BadRequestException("이미 카트에 존재하는 책입니다.");
             }
         }
 
-        member.addCartItem(cartItem);
+        cart.addCartItem(cartItem);
     }
 
     @Transactional
     public void outFromCart(Long bookId) {
         Long memberId = SecurityUtil.getCurrentMemberId();
         Member member = memberRepository.findOne(memberId).orElseThrow(() -> new NoLoginMemberException("로그인 유저 정보가 없습니다."));
-        List<CartItem> cart = member.getCartItems();
+        Cart cart = member.getCart();
 
-        for (CartItem item : cart) {
+        for (CartItem item : cart.getCartItems()) {
             if (item.getBook().getId().equals(bookId)) {
-                cart.remove(item);
+                cart.getCartItems().remove(item);
                 em.remove(item);
                 return;
             }
@@ -60,10 +62,10 @@ public class CartService {
 
     }
 
-    public List<CartItem> getCartItems() {
+    public Cart getCart() {
         Long memberId = SecurityUtil.getCurrentMemberId();
         Member member = memberRepository.findOne(memberId).orElseThrow(() -> new NoLoginMemberException("로그인 유저 정보가 없습니다."));
-        return member.getCartItems();
+        return member.getCart();
     }
 
 }
