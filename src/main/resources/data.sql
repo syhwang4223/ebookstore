@@ -1,9 +1,19 @@
+--------------------------------------------------- 회원 --------------------------------------------
+insert into member (authority, login_id) values ('ROLE_USER', 'chicken_love');
+insert into member (authority, login_id) values ('ROLE_USER', 'dadada');
+insert into member (authority, login_id) values ('ROLE_USER', 'asdf1234');
+
+
+--------------------------------------------------- 회원 --------------------------------------------
 insert into category (name) values ('romance');
 insert into category (name) values ('romance-fantasy');
 insert into category (name) values ('fantasy');
 insert into category (name) values ('bl');
 
+--------------------------------------------------- 책 --------------------------------------------
 -- 로맨스
+insert into book (title, author, price, isbn, publication_date, publisher, img_url, category_id, likes)
+values ('로미오와 로미오', '주석', 12000, '9561483123624', '2018-06-19', '우와', null, 1, 0);
 insert into book (title, author, price, isbn, publication_date, publisher, img_url, category_id, likes)
     values ('미끼는 미끼야', '수산물녀', 14000, '9881783106321', '2010-10-12', '블레스', null, 1, 0);
 insert into book (title, author, price, isbn, publication_date, publisher, img_url, category_id, likes)
@@ -12,8 +22,6 @@ insert into book (title, author, price, isbn, publication_date, publisher, img_u
     values ('돌아오지마', '이하하', 8500, '9282783656209', '2022-11-09', '아름', null, 1, 0);
 insert into book (title, author, price, isbn, publication_date, publisher, img_url, category_id, likes)
     values ('X급의 퀘스트', '리리링', 9000, '9685733178661', '2021-05-01', '아름', null, 1, 0);
-insert into book (title, author, price, isbn, publication_date, publisher, img_url, category_id, likes)
-    values ('로미오와 로미오', '주석', 12000, '9561483123624', '2018-06-19', '우와', null, 1, 0);
 -- 로맨스 판타지
 insert into book (title, author, price, isbn, publication_date, publisher, img_url, category_id, likes)
     values ('은행나무 아래에', '수지김', 19000, '9345623786325', '2015-01-24', '맥시', null, 2, 0);
@@ -47,3 +55,14 @@ insert into book (title, author, price, isbn, publication_date, publisher, img_u
     values ('체크 메이트', '다다다', 21300, '5431283105111', '2004-07-15', '반짝', null, 4, 0);
 insert into book (title, author, price, isbn, publication_date, publisher, img_url, category_id, likes)
     values ('코마상태', '구육', 78500, '5234282106321', '2002-01-19', '반짝', null, 4, 0);
+
+
+--------------------------------------------------- 댓글 --------------------------------------------
+insert into comment (content, likes, star, book_id, member_id, write_date_time, parent_id)
+    values ('결말이 좀 아쉬워요. 너무 허무하게 끝납니다.', 0, 5, 1, 1, '2018-06-19', null);
+insert into comment (content, likes, star, book_id, member_id, write_date_time, parent_id)
+    values ('재밌읍니다 김밥 한 줄 놓고 가용 ^^ @)))))', 0, 4, 1, 2, '2018-06-20', null);
+insert into comment (content, likes, star, book_id, member_id, write_date_time, parent_id)
+    values ('엥 로맨스 카테인데 로미오와 로미오면 남장물인가?', 0, 5, 1, 3, '2021-11-05', null);
+
+
