@@ -1,6 +1,6 @@
 package hello.ebookstore.repository;
 
-import hello.ebookstore.domain.Member;
+import hello.ebookstore.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

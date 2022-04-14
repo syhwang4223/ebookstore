@@ -1,8 +1,7 @@
 package hello.ebookstore.service;
 
-import hello.ebookstore.domain.Book;
-import hello.ebookstore.domain.Category;
-import hello.ebookstore.exception.BadRequestException;
+import hello.ebookstore.entity.Book;
+import hello.ebookstore.entity.Category;
 import hello.ebookstore.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

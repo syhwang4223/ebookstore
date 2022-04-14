@@ -1,7 +1,6 @@
 package hello.ebookstore.dto;
 
-import hello.ebookstore.domain.Book;
-import hello.ebookstore.domain.Category;
+import hello.ebookstore.entity.Book;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -9,7 +8,7 @@ import java.time.LocalDate;
 
 @Getter
 @ToString
-public class BookResponseDto {
+public class BookDto {
 
     private Long id;
 
@@ -25,7 +24,7 @@ public class BookResponseDto {
 
     private LocalDate publicationDate;
 
-    public BookResponseDto(Book book) {
+    public BookDto(Book book) {
         id = book.getId();
         title = book.getTitle();
         isbn = book.getIsbn();

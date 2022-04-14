@@ -1,4 +1,4 @@
-package hello.ebookstore.domain;
+package hello.ebookstore.entity;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -8,8 +8,6 @@ import lombok.ToString;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter

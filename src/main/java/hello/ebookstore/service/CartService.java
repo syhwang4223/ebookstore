@@ -1,9 +1,9 @@
 package hello.ebookstore.service;
 
-import hello.ebookstore.domain.Book;
-import hello.ebookstore.domain.Cart;
-import hello.ebookstore.domain.CartItem;
-import hello.ebookstore.domain.Member;
+import hello.ebookstore.entity.Book;
+import hello.ebookstore.entity.Cart;
+import hello.ebookstore.entity.CartItem;
+import hello.ebookstore.entity.Member;
 import hello.ebookstore.exception.BadRequestException;
 import hello.ebookstore.exception.NoLoginMemberException;
 import hello.ebookstore.repository.BookRepository;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)

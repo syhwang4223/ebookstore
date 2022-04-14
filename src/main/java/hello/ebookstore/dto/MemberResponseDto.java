@@ -1,6 +1,6 @@
 package hello.ebookstore.dto;
 
-import hello.ebookstore.domain.Member;
+import hello.ebookstore.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

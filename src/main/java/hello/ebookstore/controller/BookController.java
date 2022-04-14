@@ -1,7 +1,7 @@
 package hello.ebookstore.controller;
 
-import hello.ebookstore.domain.Category;
-import hello.ebookstore.dto.BookResponseDto;
+import hello.ebookstore.entity.Category;
+import hello.ebookstore.dto.BookDto;
 import hello.ebookstore.exception.BadRequestException;
 import hello.ebookstore.repository.CategoryRepository;
 import hello.ebookstore.service.BookService;
@@ -23,27 +23,27 @@ public class BookController {
     private final CategoryRepository categoryRepository;
 
     @GetMapping
-    public List<BookResponseDto> getAllBooks(@RequestParam(required = false, name = "category") String categoryName) {
+    public List<BookDto> getAllBooks(@RequestParam(required = false, name = "category") String categoryName) {
 
         if (categoryName != null) {
             Category category = categoryRepository.findByName(categoryName)
                     .orElseThrow(() -> new BadRequestException("존재하지 않는 카테고리입니다."));
             return bookService.findByCategory(category).stream()
-                    .map(BookResponseDto::new)
+                    .map(BookDto::new)
                     .collect(Collectors.toList());
 //            return bookService.findByCategory(category.orElseThrow(() -> new InvalidRequestException("존재하지 않는 카테고리입니다")));
         } else {
             return bookService.findBooks().stream()
-                    .map(BookResponseDto::new)
+                    .map(BookDto::new)
                     .collect(Collectors.toList());
         }
     }
 
     @GetMapping("/{bookId}")
-    public ResponseEntity<BookResponseDto> getBook(@PathVariable("bookId") Long bookId) {
-        BookResponseDto bookResponseDto = new BookResponseDto(bookService.findOne(bookId));
+    public ResponseEntity<BookDto> getBook(@PathVariable("bookId") Long bookId) {
+        BookDto bookDto = new BookDto(bookService.findOne(bookId));
 
-        return ResponseEntity.ok(bookResponseDto);
+        return ResponseEntity.ok(bookDto);
     }
 
 }

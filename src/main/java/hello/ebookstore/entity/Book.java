@@ -1,4 +1,4 @@
-package hello.ebookstore.domain;
+package hello.ebookstore.entity;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -36,6 +36,8 @@ public class Book {
     @Column(name = "likes")
     private int like;
 
+//    private int downloadCount;
+
     @Builder
     public Book (String title, String author, Integer price, String isbn,
                  LocalDate publicationDate, String publisher, String imgUrl,
@@ -48,7 +50,8 @@ public class Book {
         this.price = price;
         this.publicationDate = publicationDate;
         this.category = category;
-        this.like = 0;
+        like = 0;
+//        downloadCount = 0;
 
     }
 

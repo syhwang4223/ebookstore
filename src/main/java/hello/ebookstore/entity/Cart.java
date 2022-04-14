@@ -1,4 +1,4 @@
-package hello.ebookstore.domain;
+package hello.ebookstore.entity;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

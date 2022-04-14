@@ -1,14 +1,13 @@
 package hello.ebookstore.repository;
 
-import hello.ebookstore.domain.Book;
-import hello.ebookstore.domain.Category;
+import hello.ebookstore.entity.Book;
+import hello.ebookstore.entity.Category;
 import hello.ebookstore.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor

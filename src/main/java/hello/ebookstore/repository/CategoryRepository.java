@@ -1,6 +1,6 @@
 package hello.ebookstore.repository;
 
-import hello.ebookstore.domain.Category;
+import hello.ebookstore.entity.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

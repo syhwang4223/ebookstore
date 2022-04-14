@@ -1,6 +1,6 @@
 package hello.ebookstore.service;
 
-import hello.ebookstore.domain.Member;
+import hello.ebookstore.entity.Member;
 import hello.ebookstore.dto.*;
 import hello.ebookstore.exception.BadRequestException;
 import hello.ebookstore.exception.DuplicateException;
