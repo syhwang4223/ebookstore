@@ -2,6 +2,7 @@ package hello.ebookstore.service;
 
 import hello.ebookstore.entity.Book;
 import hello.ebookstore.entity.Category;
+import hello.ebookstore.exception.BadRequestException;
 import hello.ebookstore.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +30,7 @@ public class BookService {
     }
 
     public Book findOne(Long id) {
-        return bookRepository.findOne(id);
+        return bookRepository.findOne(id).orElseThrow(() -> new BadRequestException("존재하지 않는 책입니다: bookId = " + id));
     }
 
     public List<Book> findByCategory(Category category) {
