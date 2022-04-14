@@ -71,6 +71,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/members/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/members/signup").permitAll()
                 .antMatchers(HttpMethod.GET, "/books/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/comments/**").permitAll()
                 .anyRequest().authenticated()
 //                .anyRequest().permitAll()
 
@@ -80,6 +81,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
+    // CORS 허용 설정
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
 
