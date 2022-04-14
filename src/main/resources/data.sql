@@ -66,3 +66,7 @@ insert into comment (content, likes, star, book_id, member_id, write_date_time, 
     values ('엥 로맨스 카테인데 로미오와 로미오면 남장물인가?', 0, 5, 1, 3, '2021-11-05', null);
 
 
+insert into comment (content, likes, book_id, member_id, write_date_time, parent_id)
+    values ('네 남장물 맞아여ㅋㅋㅋ', 0, 1, 1, '2021-11-05', 3);
+
+

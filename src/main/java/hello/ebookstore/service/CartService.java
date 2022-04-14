@@ -28,7 +28,7 @@ public class CartService {
 
     @Transactional
     public void addToCart(Long bookId) {
-        Book book = bookRepository.findOne(bookId);
+        Book book = bookRepository.findOne(bookId).orElseThrow(() -> new BadRequestException("존재하지 않는 책입니다. bookId = " + bookId));
         CartItem cartItem = new CartItem(book);
 
         Long currentMemberId = SecurityUtil.getCurrentMemberId();

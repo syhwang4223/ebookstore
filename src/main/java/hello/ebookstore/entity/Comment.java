@@ -1,5 +1,6 @@
 package hello.ebookstore.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -28,16 +29,21 @@ public class Comment {
 
     private String content;
 
-    private int star;
-
-    @Column(name = "likes")
-    private int like;
-
     private LocalDateTime writeDateTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Comment parent;
+
+
+    /**
+     * 별점, 공감, 자식 코멘트는 부모 코멘트 객체만 가지고 있음
+     */
+
+    private Integer star;
+
+    @Column(name = "likes")
+    private int like;
 
     @OneToMany(mappedBy = "parent")
     private List<Comment> children = new ArrayList<>();
@@ -46,6 +52,15 @@ public class Comment {
     public void addChildrenComment(Comment comment) {
         children.add(comment);
         comment.setParent(this);
+    }
+
+    @Builder
+    public Comment(Member writer, String content, int star) {
+        this.writer = writer;
+        this.content = content;
+        this.star = star;
+        like = 0;
+        writeDateTime = LocalDateTime.now();
     }
 
 }
