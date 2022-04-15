@@ -1,10 +1,12 @@
 package hello.ebookstore.controller;
 
 import hello.ebookstore.dto.*;
+import hello.ebookstore.exception.ResultMessage;
 import hello.ebookstore.service.CartService;
 import hello.ebookstore.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +24,7 @@ public class MemberController {
 
     @PostMapping("/signup")
     public ResponseEntity<MemberResponseDto> signup(@Valid @RequestBody SignUpRequestDto signUpRequestDto) {
-        return ResponseEntity.ok(memberService.signup(signUpRequestDto));
+        return new ResponseEntity<>(memberService.signup(signUpRequestDto), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
@@ -30,6 +32,10 @@ public class MemberController {
         log.info("mainController.login");
         return ResponseEntity.ok(memberService.login(loginRequestDto));
     }
+//
+//    @PostMapping("/validator/{loginId}")
+//    public ResponseEntity<ResultMessage>
+
 
 
     /**
