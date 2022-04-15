@@ -43,6 +43,14 @@ public class MemberController {
         return ResponseEntity.ok(new ResponseMessage(message));
     }
 
+    @GetMapping("/validate/email")
+    public ResponseEntity<ResponseMessage> validateEmail(@RequestBody Map<String, String> email) {
+        Boolean exist = memberService.isExistEmail(email.get("email"));
+        String message = exist ? "이미 사용중인 이메일 주소입니다" : "사용 가능한 이메일 주소입니다";
+
+        return ResponseEntity.ok(new ResponseMessage(message));
+    }
+
 
 
     /**
