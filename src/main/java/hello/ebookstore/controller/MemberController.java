@@ -1,7 +1,7 @@
 package hello.ebookstore.controller;
 
 import hello.ebookstore.dto.*;
-import hello.ebookstore.exception.ResultMessage;
+import hello.ebookstore.exception.ResponseMessage;
 import hello.ebookstore.service.CartService;
 import hello.ebookstore.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Map;
 
 @RestController
 @Slf4j
@@ -32,9 +33,15 @@ public class MemberController {
         log.info("mainController.login");
         return ResponseEntity.ok(memberService.login(loginRequestDto));
     }
-//
-//    @PostMapping("/validator/{loginId}")
-//    public ResponseEntity<ResultMessage>
+
+
+    @PostMapping("/validator/loginId")
+    public ResponseEntity<ResponseMessage> validateLoginId(@RequestBody Map<String, String> loginId) {
+        Boolean exist = memberService.isExistLoginId(loginId.get("loginId"));
+        String message = exist ? "이미 사용중인 아이디입니다" : "사용 가능한 아이디입니다";
+
+        return ResponseEntity.ok(new ResponseMessage(message));
+    }
 
 
 

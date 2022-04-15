@@ -11,25 +11,25 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class CustomExceptionHandler {
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResult> badReqExHandle(BadRequestException e) {
+    public ResponseEntity<ResponseMessage> badReqExHandle(BadRequestException e) {
         log.error("[exceptionHandler] ", e);
-        ErrorResult errorResult = new ErrorResult(e.getMessage());
-        return new ResponseEntity<>(errorResult, HttpStatus.BAD_REQUEST);
+        ResponseMessage responseMessage = new ResponseMessage(e.getMessage());
+        return new ResponseEntity<>(responseMessage, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResult> duplicationExHandle(DuplicateException e) {
+    public ResponseEntity<ResponseMessage> duplicationExHandle(DuplicateException e) {
         log.error("[exceptionHandler] ", e);
-        ErrorResult errorResult = new ErrorResult(e.getMessage());
-        return new ResponseEntity<>(errorResult, HttpStatus.BAD_REQUEST);
+        ResponseMessage responseMessage = new ResponseMessage(e.getMessage());
+        return new ResponseEntity<>(responseMessage, HttpStatus.BAD_REQUEST);
     }
 
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResult> loginFailExHandle(LoginFailException e) {
+    public ResponseEntity<ResponseMessage> loginFailExHandle(LoginFailException e) {
         log.error("[exceptionHandler] ", e);
-        ErrorResult errorResult = new ErrorResult(e.getMessage());
-        return new ResponseEntity<>(errorResult, HttpStatus.UNAUTHORIZED);
+        ResponseMessage responseMessage = new ResponseMessage(e.getMessage());
+        return new ResponseEntity<>(responseMessage, HttpStatus.UNAUTHORIZED);
     }
 
 

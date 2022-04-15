@@ -59,6 +59,14 @@ public class MemberService {
 
     }
 
+    public Boolean isExistLoginId(String loginId) {
+        return memberRepository.findByLoginId(loginId).isPresent();
+    }
+
+    public Boolean isExistEmail(String email) {
+        return memberRepository.findByEmail(email).isPresent();
+    }
+
     /**
      * 로그인
      */
