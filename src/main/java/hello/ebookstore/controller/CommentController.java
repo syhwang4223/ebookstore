@@ -7,6 +7,7 @@ import hello.ebookstore.service.BookService;
 import hello.ebookstore.service.CommentService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.OptionalDouble;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/comments")
@@ -48,7 +50,7 @@ public class CommentController {
 
         private List<CommentResponseDto> comments = new ArrayList<>();
         private int totalCount;
-        private float avgStar; // 소수점 한자리까지
+        private double avgStar; // 소수점 한자리까지
 
         public CommentListDto(List<CommentResponseDto> comments) {
             this.comments = comments;
@@ -58,7 +60,8 @@ public class CommentController {
                 avgStar = Math.round(comments.stream()
                         .mapToDouble(CommentResponseDto::getStar)
                         .average()
-                        .getAsDouble() * 10 / 10.0);
+                        .getAsDouble() * 10) / 10.0;
+
             } else {
                 avgStar = 0;
             }
