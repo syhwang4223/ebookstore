@@ -35,7 +35,7 @@ public class MemberController {
     }
 
 
-    @PostMapping("/validator/loginId")
+    @GetMapping("/validate/login-id")
     public ResponseEntity<ResponseMessage> validateLoginId(@RequestBody Map<String, String> loginId) {
         Boolean exist = memberService.isExistLoginId(loginId.get("loginId"));
         String message = exist ? "이미 사용중인 아이디입니다" : "사용 가능한 아이디입니다";
