@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Getter
 @ToString
-public class BookDto {
+public class BookDetailDto {
 
     private Long id;
 
@@ -24,7 +24,7 @@ public class BookDto {
 
     private LocalDate publicationDate;
 
-    public BookDto(Book book) {
+    public BookDetailDto(Book book) {
         id = book.getId();
         title = book.getTitle();
         isbn = book.getIsbn();
