@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Getter
 @RequiredArgsConstructor
@@ -13,7 +14,7 @@ public class CommentResponseDto {
     private Long commentId;
     private String writer;
     private String content;
-    private int star;
+    private Integer star;
     private int like;
 
     private LocalDateTime writeDateTime;
@@ -22,8 +23,10 @@ public class CommentResponseDto {
         commentId = comment.getId();
         writer = comment.getWriter().getLoginId();
         content = comment.getContent();
+        writeDateTime = comment.getWriteDateTime();
+
+        // 대댓글에는 없음
         star = comment.getStar();
         like = comment.getLike();
-        writeDateTime = comment.getWriteDateTime();
     }
 }

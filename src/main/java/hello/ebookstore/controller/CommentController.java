@@ -3,6 +3,7 @@ package hello.ebookstore.controller;
 import hello.ebookstore.dto.CommentRequestDto;
 import hello.ebookstore.dto.CommentResponseDto;
 import hello.ebookstore.entity.Book;
+import hello.ebookstore.entity.Comment;
 import hello.ebookstore.service.BookService;
 import hello.ebookstore.service.CommentService;
 import lombok.Getter;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.OptionalDouble;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -38,9 +38,20 @@ public class CommentController {
     @PostMapping("/{bookId}")
     public void addParentComment(@PathVariable("bookId") Long bookId, CommentRequestDto commentRequestDto) {
 
-
-
         Book book = bookService.findOne(bookId);
+        /**
+         * 댓글 추가 로직
+         */
+
+    }
+
+    @GetMapping("/{bookId}/{commentId}")
+    public CommentListDto getChildrenComments(@PathVariable("bookId") Long bookId, @PathVariable("commentId") Long commentId) {
+        Comment comment = commentService.findById(commentId);
+        List<CommentResponseDto> comments = commentService.getChildrenComments(comment).stream()
+                .map(CommentResponseDto::new)
+                .collect(Collectors.toList());
+        return new CommentListDto(comments);
 
     }
 
@@ -60,7 +71,7 @@ public class CommentController {
                 avgStar = Math.round(comments.stream()
                         .mapToDouble(CommentResponseDto::getStar)
                         .average()
-                        .getAsDouble() * 10) / 10.0;
+                        .getAsDouble() * 10) / 10.0; // 소수점 둘째 자리에서 반올림
 
             } else {
                 avgStar = 0;
