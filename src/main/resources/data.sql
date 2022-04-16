@@ -52,7 +52,7 @@ insert into book (title, author, price, isbn, publication_date, publisher, img_u
 insert into book (title, author, price, isbn, publication_date, publisher, img_url, category_id, likes)
     values ('체크 메이트', '들쥐', 12700, '4851283105672', '2005-01-22', '립스틱', 'https://user-images.githubusercontent.com/85507868/163430561-36344d78-65e0-4f0f-ae4b-3448bc6da11d.png', 4, 0);
 insert into book (title, author, price, isbn, publication_date, publisher, img_url, category_id, likes)
-    values ('체크 메이트', '다다다', 21300, '5431283105111', '2004-07-15', '반짝', 'https://user-images.githubusercontent.com/85507868/163430566-e7d81753-ab88-48e8-a446-79ffb5a17c9e.png', 4, 0);
+    values ('관계자외출입허용', '다다다', 21300, '5431283105111', '2004-07-15', '반짝', 'https://user-images.githubusercontent.com/85507868/163430566-e7d81753-ab88-48e8-a446-79ffb5a17c9e.png', 4, 0);
 insert into book (title, author, price, isbn, publication_date, publisher, img_url, category_id, likes)
     values ('코마상태', '구육', 78500, '5234282106321', '2002-01-19', '반짝', 'https://user-images.githubusercontent.com/85507868/163430568-f8bf1e8b-8e49-45ae-9bf4-66c7b0780a09.png', 4, 0);
 
@@ -66,7 +66,7 @@ insert into comment (content, likes, star, book_id, member_id, write_date_time, 
     values ('엥 로맨스 카테인데 로미오와 로미오면 남장물인가?', 0, 5, 1, 3, '2021-11-05', null);
 
 
-insert into comment (content, likes, book_id, member_id, write_date_time, parent_id)
-    values ('네 남장물 맞아여ㅋㅋㅋ', 0, 1, 1, '2021-11-05', 3);
+insert into comment (content, likes, star, book_id, member_id, write_date_time, parent_id)
+    values ('네 남장물 맞아여ㅋㅋㅋ', 0, 0, 1, 1, '2021-11-05', 3);
 
 
