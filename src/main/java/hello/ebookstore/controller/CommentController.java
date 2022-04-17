@@ -59,23 +59,12 @@ public class CommentController {
     @Getter
     private static class CommentListDto {
 
-        private List<CommentResponseDto> comments = new ArrayList<>();
         private int totalCount;
-        private double avgStar; // 소수점 한자리까지
+        private List<CommentResponseDto> comments = new ArrayList<>();
 
         public CommentListDto(List<CommentResponseDto> comments) {
-            this.comments = comments;
             totalCount = comments.size();
-
-            if (totalCount > 0) {
-                avgStar = Math.round(comments.stream()
-                        .mapToDouble(CommentResponseDto::getStar)
-                        .average()
-                        .getAsDouble() * 10) / 10.0; // 소수점 둘째 자리에서 반올림
-
-            } else {
-                avgStar = 0;
-            }
+            this.comments = comments;
         }
     }
 }

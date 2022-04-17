@@ -37,5 +37,7 @@ public class BookService {
         return bookRepository.findByCategory(category);
     }
 
-
+    public List<Book> getBestSeller() {
+        return bookRepository.findTop18();
+    }
 }

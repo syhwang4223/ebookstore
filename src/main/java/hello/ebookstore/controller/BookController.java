@@ -1,5 +1,7 @@
 package hello.ebookstore.controller;
 
+import hello.ebookstore.dto.BookSimpleDto;
+import hello.ebookstore.entity.Book;
 import hello.ebookstore.entity.Category;
 import hello.ebookstore.dto.BookDetailDto;
 import hello.ebookstore.exception.BadRequestException;
@@ -44,6 +46,16 @@ public class BookController {
         BookDetailDto bookDetailDto = new BookDetailDto(bookService.findOne(bookId));
 
         return ResponseEntity.ok(bookDetailDto);
+    }
+
+    @GetMapping("/best-seller")
+    public List<BookSimpleDto> getBestSeller() {
+        List<Book> top18 = bookService.getBestSeller();
+        List<BookSimpleDto> list = top18.stream()
+                .map(BookSimpleDto::new)
+                .collect(Collectors.toList());
+        return list;
+
     }
 
 }

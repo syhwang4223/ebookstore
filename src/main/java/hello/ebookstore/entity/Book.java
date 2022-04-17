@@ -7,6 +7,8 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -26,36 +28,48 @@ public class Book {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
+
     private String imgUrl;
     private String author;
     private String publisher;
     private Integer price;
-
     private LocalDate publicationDate;
 
-    @Column(name = "likes")
-    private int like;
+    private int cumulativeSales;
+    private int totalStarsSum;
+    private int totalRatedCount;
 
-//    private int downloadCount;
 
-    @Builder
-    public Book (String title, String author, Integer price, String isbn,
-                 LocalDate publicationDate, String publisher, String imgUrl,
-                 Category category) {
-        this.title = title;
-        this.isbn = isbn;
-        this.imgUrl = imgUrl;
-        this.author = author;
-        this.publisher = publisher;
-        this.price = price;
-        this.publicationDate = publicationDate;
-        this.category = category;
-        like = 0;
-//        downloadCount = 0;
-
+    //== 연관관계 메서드 ==//
+    public void addComment(Comment comment) {
+        comments.add(comment);
+        comment.setBook(this);
     }
 
-    protected Book(){}
+
+    //== 비즈니스 로직 ==//
+    public double getAvgStar() {
+        return Math.round((double) totalStarsSum / totalRatedCount * 10) / 10.0;
+    }
+
+//    @Builder
+//    public Book (String title, String author, Integer price, String isbn,
+//                 LocalDate publicationDate, String publisher, String imgUrl,
+//                 Category category) {
+//        this.title = title;
+//        this.isbn = isbn;
+//        this.imgUrl = imgUrl;
+//        this.author = author;
+//        this.publisher = publisher;
+//        this.price = price;
+//        this.publicationDate = publicationDate;
+//        this.category = category;
+//
+//    }
+
+//    protected Book(){}
 
 
 }
