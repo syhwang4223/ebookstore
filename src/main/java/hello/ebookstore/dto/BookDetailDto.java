@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Getter
 @ToString
-public class BookDetailDto {
+public class BookDetailDto extends BookSimpleDto {
 
     private Long id;
 
@@ -23,6 +23,8 @@ public class BookDetailDto {
     private Integer price;
 
     private LocalDate publicationDate;
+    private double avgStar;
+    private int totalRatedCount;
 
     public BookDetailDto(Book book) {
         id = book.getId();
@@ -34,5 +36,7 @@ public class BookDetailDto {
         publisher = book.getPublisher();
         price = book.getPrice();
         publicationDate = book.getPublicationDate();
+        avgStar = book.getAvgStar();
+        totalRatedCount = book.getTotalRatedCount();
     }
 }
