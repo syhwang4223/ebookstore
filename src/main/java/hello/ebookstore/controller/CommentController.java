@@ -27,7 +27,7 @@ public class CommentController {
     @GetMapping("/{bookId}")
     public CommentListDto getParentComments(@PathVariable("bookId") Long bookId) {
         Book book = bookService.findOne(bookId);
-        List<CommentResponseDto> comments = commentService.getParentComments(book).stream()
+        List<CommentResponseDto> comments = book.getComments().stream()
                 .map(CommentResponseDto::new)
                 .collect(Collectors.toList());
 
