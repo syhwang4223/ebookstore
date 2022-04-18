@@ -25,18 +25,18 @@ public class BookController {
     private final CategoryRepository categoryRepository;
 
     @GetMapping
-    public List<BookDetailDto> getAllBooks(@RequestParam(required = false, name = "category") String categoryName) {
+    public List<BookSimpleDto> getAllBooks(@RequestParam(required = false, name = "category") String categoryName) {
 
         if (categoryName != null) {
             Category category = categoryRepository.findByName(categoryName)
                     .orElseThrow(() -> new BadRequestException("존재하지 않는 카테고리입니다."));
             return bookService.findByCategory(category).stream()
-                    .map(BookDetailDto::new)
+                    .map(BookSimpleDto::new)
                     .collect(Collectors.toList());
 //            return bookService.findByCategory(category.orElseThrow(() -> new InvalidRequestException("존재하지 않는 카테고리입니다")));
         } else {
             return bookService.findBooks().stream()
-                    .map(BookDetailDto::new)
+                    .map(BookSimpleDto::new)
                     .collect(Collectors.toList());
         }
     }
@@ -50,11 +50,10 @@ public class BookController {
 
     @GetMapping("/best-seller")
     public List<BookSimpleDto> getBestSeller() {
-        List<Book> top18 = bookService.getBestSeller();
-        List<BookSimpleDto> list = top18.stream()
+        List<Book> findBooks = bookService.getBestSeller();
+        return findBooks.stream()
                 .map(BookSimpleDto::new)
                 .collect(Collectors.toList());
-        return list;
 
     }
 
