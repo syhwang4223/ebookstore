@@ -14,8 +14,11 @@ public class CommentResponseDto {
     private Long commentId;
     private String writer;
     private String content;
+    
+    // 대댓글에는 없음
     private Integer star;
     private int like;
+    private int childrenCount;
 
     private LocalDateTime writeDateTime;
 
@@ -28,5 +31,6 @@ public class CommentResponseDto {
         // 대댓글에는 없음
         star = comment.getStar();
         like = comment.getLike();
+        childrenCount = comment.getChildren().size();
     }
 }
