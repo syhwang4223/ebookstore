@@ -4,11 +4,14 @@ import hello.ebookstore.dto.CommentRequestDto;
 import hello.ebookstore.dto.CommentResponseDto;
 import hello.ebookstore.entity.Book;
 import hello.ebookstore.entity.Comment;
+import hello.ebookstore.entity.Member;
+import hello.ebookstore.jwt.UserAdapter;
 import hello.ebookstore.service.BookService;
 import hello.ebookstore.service.CommentService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -26,8 +29,10 @@ public class CommentController {
 
     @GetMapping("/{bookId}")
     public CommentListDto getParentComments(@PathVariable("bookId") Long bookId) {
+
         Book book = bookService.findOne(bookId);
-        List<CommentResponseDto> comments = book.getComments().stream()
+
+        List<CommentResponseDto> comments = commentService.getParentComments(book).stream()
                 .map(CommentResponseDto::new)
                 .collect(Collectors.toList());
 
@@ -36,21 +41,26 @@ public class CommentController {
     }
 
     @PostMapping("/{bookId}")
-    public void addParentComment(@PathVariable("bookId") Long bookId, CommentRequestDto commentRequestDto) {
-
+    public CommentResponseDto addParentComment(@AuthenticationPrincipal UserAdapter adapter,
+                                               @PathVariable("bookId") Long bookId,
+                                               @RequestBody CommentRequestDto commentRequestDto) {
         Book book = bookService.findOne(bookId);
-        /**
-         * 댓글 추가 로직
-         */
+        System.out.println("book.getTotalStarsSum() = " + book.getTotalStarsSum());
+        Long commentId = commentService.addParentComment(commentRequestDto.getContent(), commentRequestDto.getStar(), adapter.getMember(), book);
+        Comment comment = commentService.findById(commentId);
+        System.out.println("book.getTotalStarsSum() = " + book.getTotalStarsSum());
 
+        return new CommentResponseDto(comment);
     }
 
     @GetMapping("/{bookId}/{commentId}")
     public CommentListDto getChildrenComments(@PathVariable("bookId") Long bookId, @PathVariable("commentId") Long commentId) {
         Comment comment = commentService.findById(commentId);
+
         List<CommentResponseDto> comments = commentService.getChildrenComments(comment).stream()
                 .map(CommentResponseDto::new)
                 .collect(Collectors.toList());
+
         return new CommentListDto(comments);
 
     }

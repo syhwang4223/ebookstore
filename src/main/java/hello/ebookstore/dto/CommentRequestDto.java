@@ -1,23 +1,19 @@
 package hello.ebookstore.dto;
 
-import hello.ebookstore.entity.Comment;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDateTime;
+import lombok.Getter;
 
 @Getter
-@RequiredArgsConstructor
 public class CommentRequestDto {
 
     private int star;
     private String content;
 
-    public Comment toComment() {
-        return Comment.builder()
-                .star(star)
-                .content(content)
-                .build();
-    }
-
+//    public CommentRequestDto(int star, String content) {
+//        this.star = star;
+//        this.content = content;
+//    }
+//
+//    protected CommentRequestDto() {
+//    }
 }

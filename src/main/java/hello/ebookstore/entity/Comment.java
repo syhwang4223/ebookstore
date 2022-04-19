@@ -48,19 +48,21 @@ public class Comment {
     @OneToMany(mappedBy = "parent")
     private List<Comment> children = new ArrayList<>();
 
-    //== 연관관계 메서드 ==//
-    public void addChildrenComment(Comment comment) {
-        children.add(comment);
-        comment.setParent(this);
+
+    public static Comment createComment(String content, int star, Member writer, Book book) {
+        Comment comment = new Comment();
+        comment.setContent(content);
+        comment.setStar(star);
+        comment.setWriter(writer);
+        comment.setBook(book);
+        comment.setLike(0);
+        comment.writeDateTime = LocalDateTime.now();
+
+        book.addComment(comment);
+
+        return comment;
     }
 
-    @Builder
-    public Comment(Member writer, String content, int star) {
-        this.writer = writer;
-        this.content = content;
-        this.star = star;
-        like = 0;
-        writeDateTime = LocalDateTime.now();
-    }
+
 
 }
