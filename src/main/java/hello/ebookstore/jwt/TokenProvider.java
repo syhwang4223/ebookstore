@@ -8,6 +8,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -35,7 +36,11 @@ public class TokenProvider {
 
     private Key key;
 
-    public TokenProvider(@Value("${jwt.secret}") String secretKey) {
+//    @Autowired
+    private final CustomUserDetailsService userDetailsService;
+
+    public TokenProvider(@Value("${jwt.secret}") String secretKey, CustomUserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
@@ -83,9 +88,20 @@ public class TokenProvider {
                         .collect(Collectors.toList());
 
         // UserDetails 객체를 만들어서 Authentication 리턴
-        UserDetails userDetails = new User(claims.getSubject(), "", authorities);
+//        UserDetails userDetails = new User(claims.getSubject(), "", authorities);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(getUserLoginId(token));
 
         return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
+    }
+
+    // 토큰에서 회원 로그인 아이디 추출
+    public String getUserLoginId(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
     }
 
     /**
