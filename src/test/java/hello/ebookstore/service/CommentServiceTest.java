@@ -4,11 +4,14 @@ import hello.ebookstore.entity.Authority;
 import hello.ebookstore.entity.Book;
 import hello.ebookstore.entity.Comment;
 import hello.ebookstore.entity.Member;
+import hello.ebookstore.exception.BadRequestException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,14 +22,18 @@ class CommentServiceTest {
 
     @Autowired CommentService commentService;
     @Autowired BookService bookService;
+    @Autowired EntityManager em;
     
     @Test
-    public void addParentComment() throws Exception{
+    public void 부모댓글작성() throws Exception{
         // given
         String content = "잘읽었습니다";
         int star = 4;
         Book book = bookService.findOne(1L);
         Member member = new Member("testMember", "asdf", "sadf@asfd", Authority.ROLE_USER);
+
+        em.persist(book);
+        em.persist(member);
 
         int totalStarsSum = book.getTotalStarsSum();
         int totalRatedCount = book.getTotalRatedCount();
@@ -51,5 +58,30 @@ class CommentServiceTest {
         System.out.println("book.getTotalStarsSum() = " + book.getTotalStarsSum());
         System.out.println("book.getAvgStar() = " + book.getAvgStar());
     
+    }
+
+    @Test
+    public void 같은_책에_두번_평점을_남기면_오류() throws Exception{
+        // given
+        String content = "잘읽었습니다";
+        int star = 4;
+        Book book = bookService.findOne(1L);
+        Member member = new Member("testMember", "asdf", "sadf@asfd", Authority.ROLE_USER);
+
+        em.persist(book);
+        em.persist(member);
+
+        Long commentId = commentService.addParentComment(content, star, member, book);
+        Comment comment = commentService.findById(commentId);
+
+
+        // when
+
+        // then
+        org.junit.jupiter.api.Assertions.assertThrows(BadRequestException.class, () ->{
+            commentService.addParentComment("같은 책에 댓글 또 달기", 1, member, book);
+        });
+
+
     }
 }

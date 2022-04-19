@@ -32,8 +32,19 @@ public class CommentService {
 
     @Transactional
     public Long addParentComment(String content, int star, Member writer, Book book) {
-
+        if (commentRepository.findByBookIdMemberId(book, writer).isPresent()) {
+            throw new BadRequestException("평점은 한 책에 한 번 씩만 남길 수 있습니다.");
+        }
         Comment comment = Comment.createComment(content, star, writer, book);
+        commentRepository.save(comment);
+        return comment.getId();
+    }
+
+    @Transactional
+    public Long addChildrenComment(Comment parent, String content, int star, Member writer, Book book) {
+        Comment comment = Comment.createComment(content, star, writer, book);
+        parent.addChildren(comment);
+
         commentRepository.save(comment);
         return comment.getId();
     }

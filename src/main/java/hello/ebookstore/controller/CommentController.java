@@ -27,6 +27,7 @@ public class CommentController {
     private final CommentService commentService;
     private final BookService bookService;
 
+    // 한 책에 대한 댓글 조회
     @GetMapping("/{bookId}")
     public CommentListDto getParentComments(@PathVariable("bookId") Long bookId) {
 
@@ -40,19 +41,18 @@ public class CommentController {
 
     }
 
+    // 댓글 달기
     @PostMapping("/{bookId}")
     public CommentResponseDto addParentComment(@AuthenticationPrincipal UserAdapter adapter,
                                                @PathVariable("bookId") Long bookId,
                                                @RequestBody CommentRequestDto commentRequestDto) {
         Book book = bookService.findOne(bookId);
-        System.out.println("book.getTotalStarsSum() = " + book.getTotalStarsSum());
-        Long commentId = commentService.addParentComment(commentRequestDto.getContent(), commentRequestDto.getStar(), adapter.getMember(), book);
-        Comment comment = commentService.findById(commentId);
-        System.out.println("book.getTotalStarsSum() = " + book.getTotalStarsSum());
+        Long savedId = commentService.addParentComment(commentRequestDto.getContent(), commentRequestDto.getStar(), adapter.getMember(), book);
 
-        return new CommentResponseDto(comment);
+        return new CommentResponseDto(commentService.findById(savedId));
     }
 
+    // 한 댓글의 대댓글 조회
     @GetMapping("/{bookId}/{commentId}")
     public CommentListDto getChildrenComments(@PathVariable("bookId") Long bookId, @PathVariable("commentId") Long commentId) {
         Comment comment = commentService.findById(commentId);
@@ -62,6 +62,22 @@ public class CommentController {
                 .collect(Collectors.toList());
 
         return new CommentListDto(comments);
+
+    }
+
+    // 대댓글 달기
+    @PostMapping("/{bookId}/{commentId}")
+    public CommentResponseDto addChildrenComment(@AuthenticationPrincipal UserAdapter adapter,
+                                                 @PathVariable("bookId") Long bookId,
+                                                 @PathVariable("commentId") Long commentId,
+                                                 @RequestBody CommentRequestDto commentRequestDto) {
+        Comment parent = commentService.findById(commentId);
+        Member writer = adapter.getMember();
+        Book book = bookService.findOne(bookId);
+
+        Long savedId = commentService.addChildrenComment(parent, commentRequestDto.getContent(), commentRequestDto.getStar(), writer, book);
+
+        return new CommentResponseDto(commentService.findById(savedId));
 
     }
 
