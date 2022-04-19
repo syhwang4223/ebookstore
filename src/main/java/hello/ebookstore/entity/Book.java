@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter @Setter
+@Getter
 @ToString
 public class Book {
 
@@ -28,8 +28,8 @@ public class Book {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
-    private List<Comment> comments = new ArrayList<>();
+//    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+//    private List<Comment> comments = new ArrayList<>();
 
     private String imgUrl;
     private String author;
@@ -44,8 +44,9 @@ public class Book {
 
     //== 연관관계 메서드 ==//
     public void addComment(Comment comment) {
-        comments.add(comment);
-        comment.setBook(this);
+//        comments.add(comment);
+        totalStarsSum += comment.getStar();
+        totalRatedCount += 1;
     }
 
 
@@ -53,23 +54,6 @@ public class Book {
     public double getAvgStar() {
         return Math.round((double) totalStarsSum / totalRatedCount * 10) / 10.0;
     }
-
-//    @Builder
-//    public Book (String title, String author, Integer price, String isbn,
-//                 LocalDate publicationDate, String publisher, String imgUrl,
-//                 Category category) {
-//        this.title = title;
-//        this.isbn = isbn;
-//        this.imgUrl = imgUrl;
-//        this.author = author;
-//        this.publisher = publisher;
-//        this.price = price;
-//        this.publicationDate = publicationDate;
-//        this.category = category;
-//
-//    }
-
-//    protected Book(){}
 
 
 }
