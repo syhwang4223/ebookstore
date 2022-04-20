@@ -1,13 +1,17 @@
 package hello.ebookstore.controller;
 
 import hello.ebookstore.dto.*;
+import hello.ebookstore.entity.CartItem;
+import hello.ebookstore.entity.Member;
 import hello.ebookstore.exception.ResponseMessage;
+import hello.ebookstore.jwt.UserAdapter;
 import hello.ebookstore.service.CartService;
 import hello.ebookstore.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,7 +29,8 @@ public class MemberController {
 
     @PostMapping("/signup")
     public ResponseEntity<MemberResponseDto> signup(@Valid @RequestBody SignUpRequestDto signUpRequestDto) {
-        return new ResponseEntity<>(memberService.signup(signUpRequestDto), HttpStatus.CREATED);
+        Member member = memberService.signup(signUpRequestDto);
+        return new ResponseEntity<>(new MemberResponseDto(member), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
@@ -68,22 +73,25 @@ public class MemberController {
     
     // 카트에 책 담기
     @PostMapping("/cart/{bookId}")
-    public String addToCart(@PathVariable Long bookId) {
-        cartService.addToCart(bookId);
+    public String addToCart(@AuthenticationPrincipal UserAdapter adapter, @PathVariable Long bookId) {
+        Member loginMember = adapter.getMember();
+        CartItem savedItem = cartService.addToCart(bookId, loginMember);
         return "ok";
     }
 
     // 카트에서 책 삭제
     @DeleteMapping("/cart/{bookId}")
-    public String outFromCart(@PathVariable Long bookId) {
-        cartService.outFromCart(bookId);
+    public String outFromCart(@AuthenticationPrincipal UserAdapter adapter, @PathVariable Long bookId) {
+        Member loginMember = adapter.getMember();
+        cartService.outFromCart(bookId, loginMember);
         return "ok";
     }
 
     // 카트에 담긴 책 목록 조회
     @GetMapping("/cart")
-    public CartDto getCart() {
-        return new CartDto(cartService.getCart());
+    public CartDto getCart(@AuthenticationPrincipal UserAdapter adapter) {
+        Member loginMember = adapter.getMember();
+        return new CartDto(cartService.getCart(loginMember));
     }
 
 

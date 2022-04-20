@@ -2,6 +2,7 @@ package hello.ebookstore.dto;
 
 import hello.ebookstore.entity.Cart;
 import hello.ebookstore.entity.CartItem;
+import hello.ebookstore.entity.Member;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

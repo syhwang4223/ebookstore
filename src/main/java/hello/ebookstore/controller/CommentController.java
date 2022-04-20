@@ -11,6 +11,8 @@ import hello.ebookstore.service.CommentService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,13 +45,13 @@ public class CommentController {
 
     // 댓글 달기
     @PostMapping("/{bookId}")
-    public CommentResponseDto addParentComment(@AuthenticationPrincipal UserAdapter adapter,
-                                               @PathVariable("bookId") Long bookId,
-                                               @RequestBody CommentRequestDto commentRequestDto) {
+    public ResponseEntity<CommentResponseDto> addParentComment(@AuthenticationPrincipal UserAdapter adapter,
+                                                              @PathVariable("bookId") Long bookId,
+                                                              @RequestBody CommentRequestDto commentRequestDto) {
         Book book = bookService.findOne(bookId);
         Long savedId = commentService.addParentComment(commentRequestDto.getContent(), commentRequestDto.getStar(), adapter.getMember(), book);
 
-        return new CommentResponseDto(commentService.findById(savedId));
+        return new ResponseEntity<>(new CommentResponseDto(commentService.findById(savedId)), HttpStatus.CREATED);
     }
 
     // 한 댓글의 대댓글 조회

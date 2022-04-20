@@ -16,7 +16,7 @@ public class Cart {
     @Column(name = "cart_id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "cart")
+    @OneToOne(fetch = FetchType.LAZY)
     private Member member;
 
 
@@ -33,6 +33,13 @@ public class Cart {
         cartItem.setCart(this);
     }
 
+    public static Cart createCart(Member member) {
+        Cart cart = new Cart();
+        cart.setMember(member);
+
+        return cart;
+    }
+
 
     //== 비즈니스 로직 ==//
 
@@ -40,16 +47,12 @@ public class Cart {
 
     // 카트에 담긴 책 금액 총 합
     public int getTotalPrice() {
-//        int totalPrice = 0;
-//        for (CartItem cartItem : cartItems) {
-//            totalPrice += cartItem.getBook().getPrice();
-//        }
-//        return totalPrice;
-//
         return cartItems.stream()
                 .mapToInt(c -> c.getBook().getPrice())
                 .sum();
     }
 
-
+    public void setMember(Member member) {
+        this.member = member;
+    }
 }

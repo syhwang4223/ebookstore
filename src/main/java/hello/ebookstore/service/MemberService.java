@@ -1,11 +1,13 @@
 package hello.ebookstore.service;
 
+import hello.ebookstore.entity.Cart;
 import hello.ebookstore.entity.Member;
 import hello.ebookstore.dto.*;
 import hello.ebookstore.exception.BadRequestException;
 import hello.ebookstore.exception.DuplicateException;
 import hello.ebookstore.exception.LoginFailException;
 import hello.ebookstore.jwt.TokenProvider;
+import hello.ebookstore.repository.CartRepository;
 import hello.ebookstore.repository.MemberRepository;
 import hello.ebookstore.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,7 @@ public class MemberService {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final MemberRepository memberRepository;
+    private final CartRepository cartRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
 
@@ -35,13 +38,16 @@ public class MemberService {
      * 회원 가입
      */
     @Transactional
-    public MemberResponseDto signup(@Valid SignUpRequestDto signUpRequestDto){
+    public Member signup(@Valid SignUpRequestDto signUpRequestDto){
         validateDuplicateMember(signUpRequestDto);
         validatePasswordConfirm(signUpRequestDto);
         Member member = signUpRequestDto.toMember(passwordEncoder);
-        memberRepository.save(member);
+        Cart cart = Cart.createCart(member);
 
-        return new MemberResponseDto(member);
+        memberRepository.save(member);
+        cartRepository.save(cart);
+
+        return member;
     }
 
     private void validatePasswordConfirm(SignUpRequestDto signUpRequestDto) {
