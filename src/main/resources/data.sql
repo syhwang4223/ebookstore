@@ -60,7 +60,7 @@ insert into book (title, author, price, isbn, publication_date, publisher, img_u
 insert into book (title, author, price, isbn, publication_date, publisher, img_url, category_id, cumulative_sales, total_stars_sum, total_rated_count)
     values ('s급 헌터의 회귀일지', '떡튀순', 30400, '1581584094325', '2022-04-19', '우경출판', 'https://user-images.githubusercontent.com/90035354/164460229-85570934-1261-4eaf-b712-b4a366214040.png', 3, 3200, 8840, 2387);
 insert into book (title, author, price, isbn, publication_date, publisher, img_url, category_id, cumulative_sales, total_stars_sum, total_rated_count)
-    values ('좀비 아포칼립스 소설에 빙의해버렸다', '영장류', 21400, '1581584094325', '2022-04-19', '새벽문학', 'https://user-images.githubusercontent.com/90035354/164460222-4227bc3d-b30f-4fa7-833c-c58ae4c9ab99.png', 3, 7200, 30001, 6387);
+    values ('좀비 아포칼립스 소설에 빙의해버렸다', '영장류', 21400, '1581584009123', '2022-04-19', '새벽문학', 'https://user-images.githubusercontent.com/90035354/164460222-4227bc3d-b30f-4fa7-833c-c58ae4c9ab99.png', 3, 7200, 30001, 6387);
 
 -- bl
 insert into book (title, author, price, isbn, publication_date, publisher, img_url, category_id, cumulative_sales, total_stars_sum, total_rated_count)
