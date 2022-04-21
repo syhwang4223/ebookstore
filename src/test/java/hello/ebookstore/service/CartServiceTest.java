@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -37,7 +38,9 @@ class CartServiceTest {
 
         // then
         Cart findCart = cartService.getCart(member);
-        Assertions.assertThat(findCart.getCartItems().size()).isEqualTo(1);
+        assertThat(findCart.getCartItems().size()).isEqualTo(1);
+        assertThat(cartService.isExistInCart(1L, findCart)).isEqualTo(true);
+        assertThat(cartService.isExistInCart(2L, findCart)).isEqualTo(false);
 
 
     }
@@ -80,7 +83,7 @@ class CartServiceTest {
 
         // then
         Cart findCart = cartService.getCart(member);
-        Assertions.assertThat(findCart.getCartItems().size()).isEqualTo(0);
+        assertThat(findCart.getCartItems().size()).isEqualTo(0);
     }
     
     @Test

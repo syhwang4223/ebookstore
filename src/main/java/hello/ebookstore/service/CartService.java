@@ -31,18 +31,25 @@ public class CartService {
     @Transactional
     public CartItem addToCart(Long bookId, Member loginMember) {
         Book book = bookRepository.findOne(bookId).orElseThrow(() -> new BadRequestException("존재하지 않는 책입니다. bookId = " + bookId));
-        CartItem cartItem = new CartItem(book);
-
         Cart cart = cartRepository.findByMember(loginMember);
+        if (isExistInCart(bookId, cart)) {
+            throw new BadRequestException("이미 카트에 존재하는 책입니다.");
+        }
+
+        CartItem cartItem = new CartItem(book);
+        cart.addCartItem(cartItem);
+        return cartItem;
+    }
+
+    public Boolean isExistInCart(Long bookId, Cart cart) {
+        Book book = bookRepository.findOne(bookId).orElseThrow(() -> new BadRequestException("존재하지 않는 책입니다. bookId = " + bookId));
 
         for (CartItem item : cart.getCartItems()) {
             if (item.getBook().getId().equals(bookId)) {
-                throw new BadRequestException("이미 카트에 존재하는 책입니다.");
+                return true;
             }
         }
-
-        cart.addCartItem(cartItem);
-        return cartItem;
+        return false;
     }
 
     @Transactional
@@ -57,7 +64,6 @@ public class CartService {
             }
         }
         throw new BadRequestException("카트에 해당 책이 존재하지 않습니다. bookId : " + bookId);
-
     }
 
 

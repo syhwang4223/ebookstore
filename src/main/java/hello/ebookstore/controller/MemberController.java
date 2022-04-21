@@ -15,6 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -57,7 +58,6 @@ public class MemberController {
     }
 
 
-
     /**
      * 현재 로그인 중인 회원 정보 조회
      */
@@ -68,9 +68,9 @@ public class MemberController {
 
 
     /**
-     *  카트 기능
+     * 카트 기능
      */
-    
+
     // 카트에 책 담기
     @PostMapping("/cart/{bookId}")
     public String addToCart(@AuthenticationPrincipal UserAdapter adapter, @PathVariable Long bookId) {
@@ -79,8 +79,32 @@ public class MemberController {
         return "ok";
     }
 
+    // 카트에 있는 책인지 판별
+    @GetMapping("/cart/check/{bookId}")
+    public Map<String, Boolean> isExistInCart(@AuthenticationPrincipal UserAdapter adapter, @PathVariable Long bookId) {
+        Member loginMember = adapter.getMember();
+        Boolean exist = cartService.isExistInCart(bookId, cartService.getCart(loginMember));
+
+        Map<String, Boolean> result = new HashMap<>();
+        result.put("exist", exist);
+        return result;
+    }
+
+
+    // 카트에 담긴 책의 총 갯수 반환
+    @GetMapping("/cart/totalCount")
+    public Map<String, Integer> getBookCountInCart(@AuthenticationPrincipal UserAdapter adapter) {
+        Member loginMember = adapter.getMember();
+        int totalCount = cartService.getCart(loginMember).getTotalCount();
+
+        Map<String, Integer> result = new HashMap<>();
+        result.put("totalBooksCountInCart", totalCount);
+        return result;
+    }
+
     // 카트에서 책 삭제
     @DeleteMapping("/cart/{bookId}")
+
     public String outFromCart(@AuthenticationPrincipal UserAdapter adapter, @PathVariable Long bookId) {
         Member loginMember = adapter.getMember();
         cartService.outFromCart(bookId, loginMember);
@@ -93,8 +117,6 @@ public class MemberController {
         Member loginMember = adapter.getMember();
         return new CartDto(cartService.getCart(loginMember));
     }
-
-
 
 
 }

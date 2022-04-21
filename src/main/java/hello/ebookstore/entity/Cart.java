@@ -52,6 +52,11 @@ public class Cart {
                 .sum();
     }
 
+    // 카트에 담긴 아이템의 갯수
+    public int getTotalCount() {
+        return cartItems.size();
+    }
+
     public void setMember(Member member) {
         this.member = member;
     }
