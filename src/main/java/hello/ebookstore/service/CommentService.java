@@ -46,8 +46,7 @@ public class CommentService {
     @Transactional
     public void updateComment(Long commentId, Member writer, String content, int star) {
         Comment findComment = commentRepository.findOne(commentId).orElseThrow(() -> new BadRequestException("존재하지 않는 책입니다"));
-        log.debug(findComment.getWriter().toString());
-        log.debug(writer.toString());
+
         if (!findComment.getWriter().getId().equals(writer.getId())) {
             throw new BadRequestException("자신이 작성한 댓글만 수정할 수 있습니다.");
         } else {
@@ -56,6 +55,18 @@ public class CommentService {
     }
 
     // 삭제
+    @Transactional
+    public void deleteComment(Long commentId, Member writer) {
+        Comment findComment = commentRepository.findOne(commentId).orElseThrow(() -> new BadRequestException("존재하지 않는 책입니다"));
+        Book book = findComment.getBook();
+
+        if (!findComment.getWriter().getId().equals(writer.getId())) {
+            throw new BadRequestException("자신이 작성한 댓글만 삭제할 수 있습니다.");
+        } else {
+            commentRepository.delete(findComment);
+            book.minusStar(findComment.getStar());
+        }
+    }
 
 
 

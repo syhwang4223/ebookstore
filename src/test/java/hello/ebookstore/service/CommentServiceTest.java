@@ -128,5 +128,30 @@ class CommentServiceTest {
         // 수정한 별점이 책의 총 별점 수에도 반영되어야 함
         assertThat(book.getTotalStarsSum()).isEqualTo(totalStars - 1);
     }
+    
+    @Test
+    public void 댓글삭제() throws Exception{
+        // given
+        String content = "잘읽었습니다";
+        int star = 4;
+        Book book = bookService.findOne(1L);
+        Member member = new Member("testMember", "asdf", "sadf@asfd", Authority.ROLE_USER);
+
+        em.persist(book);
+        em.persist(member);
+
+        Long commentId = commentService.addParentComment(content, star, member, book);
+        int totalStars = book.getTotalStarsSum();
+        int totalRatedCount = book.getTotalRatedCount();
+
+        // when
+        commentService.deleteComment(commentId, member);
+        
+        // then
+        // 별점 수, 평가 수 감소
+        assertThat(book.getTotalStarsSum()).isEqualTo(totalStars - 4);
+        assertThat(book.getTotalRatedCount()).isEqualTo(totalRatedCount - 1);
+
+    }
 
 }

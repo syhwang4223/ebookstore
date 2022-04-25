@@ -20,6 +20,10 @@ public class CommentRepository {
         em.persist(comment);
     }
 
+    public void delete(Comment comment) {
+        em.remove(comment);
+    }
+
     public Optional<Comment> findOne(Long commentId) {
        return Optional.of(em.find(Comment.class, commentId));
     }

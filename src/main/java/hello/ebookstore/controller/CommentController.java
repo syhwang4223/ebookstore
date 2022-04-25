@@ -5,6 +5,7 @@ import hello.ebookstore.dto.CommentResponseDto;
 import hello.ebookstore.entity.Book;
 import hello.ebookstore.entity.Comment;
 import hello.ebookstore.entity.Member;
+import hello.ebookstore.exception.ResponseMessage;
 import hello.ebookstore.jwt.UserAdapter;
 import hello.ebookstore.service.BookService;
 import hello.ebookstore.service.CommentService;
@@ -66,6 +67,16 @@ public class CommentController {
         commentService.updateComment(commentId, adapter.getMember(), commentRequestDto.getContent(), commentRequestDto.getStar());
 
         return new CommentResponseDto(commentService.findById(commentId));
+    }
+
+    // 댓글 삭제
+    @DeleteMapping("/{bookId}/{commentId}")
+    public ResponseMessage deleteParentComment(@AuthenticationPrincipal UserAdapter adapter,
+                                               @PathVariable("bookId") Long bookId, @PathVariable("commentId") Long commentId) {
+
+        commentService.deleteComment(commentId, adapter.getMember());
+        return new ResponseMessage("댓글이 삭제되었습니다");
+
     }
 
 
