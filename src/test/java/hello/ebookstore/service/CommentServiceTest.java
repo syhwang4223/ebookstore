@@ -5,7 +5,6 @@ import hello.ebookstore.entity.Book;
 import hello.ebookstore.entity.Comment;
 import hello.ebookstore.entity.Member;
 import hello.ebookstore.exception.BadRequestException;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -78,10 +77,56 @@ class CommentServiceTest {
         // when
 
         // then
-        org.junit.jupiter.api.Assertions.assertThrows(BadRequestException.class, () ->{
+        assertThrows(BadRequestException.class, () ->{
             commentService.addParentComment("같은 책에 댓글 또 달기", 1, member, book);
         });
-
-
     }
+    
+    @Test
+    public void 직접_작성한_댓글만_수정가능() throws Exception{
+        // given
+        String content = "잘읽었습니다";
+        int star = 4;
+        Book book = bookService.findOne(1L);
+        Member member = new Member("testMember", "asdf", "sadf@asfd", Authority.ROLE_USER);
+
+        em.persist(book);
+        em.persist(member);
+
+        Long commentId = commentService.addParentComment(content, star, member, book);
+
+
+        // when
+
+        // then
+        assertThrows(BadRequestException.class, () -> {
+            commentService.updateComment(commentId, new Member("2222", "2222", "asasdf@asdf", Authority.ROLE_USER), "수정시도", 3);
+        });
+    }
+    @Test
+    public void 댓글수정() throws Exception{
+        // given
+        String content = "잘읽었습니다";
+        int star = 4;
+        Book book = bookService.findOne(1L);
+        Member member = new Member("testMember", "asdf", "sadf@asfd", Authority.ROLE_USER);
+
+        em.persist(book);
+        em.persist(member);
+
+        Long commentId = commentService.addParentComment(content, star, member, book);
+        int totalStars = book.getTotalStarsSum();
+
+        // when
+        commentService.updateComment(commentId, member, "수정한 댓글", 3);
+
+        // then
+        Comment updateComment = commentService.findById(commentId);
+        assertThat(updateComment.getContent()).isEqualTo("수정한 댓글");
+        assertThat(updateComment.getStar()).isEqualTo(3);
+        
+        // 수정한 별점이 책의 총 별점 수에도 반영되어야 함
+        assertThat(book.getTotalStarsSum()).isEqualTo(totalStars - 1);
+    }
+
 }

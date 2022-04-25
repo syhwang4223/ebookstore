@@ -45,7 +45,7 @@ public class CommentRepository {
     }
 
     // 이미 작성한 댓글이 있는 조회
-    public Optional<Comment> findByBookIdMemberId(Book book, Member member) {
+    public Optional<Comment> findByBookIdAndMemberId(Book book, Member member) {
         return em.createQuery("select c from Comment c where c.book = :book and c.writer = :member", Comment.class)
                 .setParameter("book", book)
                 .setParameter("member", member)

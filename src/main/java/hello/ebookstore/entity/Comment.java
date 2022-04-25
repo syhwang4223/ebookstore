@@ -1,6 +1,5 @@
 package hello.ebookstore.entity;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -65,9 +64,18 @@ public class Comment {
         comment.setLike(0);
         comment.writeDateTime = LocalDateTime.now();
 
-        book.addComment(comment);
+        book.addStar(star);
 
         return comment;
+    }
+
+    public void update(String content, int star) {
+        book.minusStar(this.getStar());
+
+        this.content = content;
+        this.star = star;
+
+        book.addStar(star);
     }
 
 

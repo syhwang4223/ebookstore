@@ -29,6 +29,9 @@ public class CommentController {
     private final CommentService commentService;
     private final BookService bookService;
 
+    
+    //== 부모 댓글 ==///
+    
     // 한 책에 대한 댓글 조회
     @GetMapping("/{bookId}")
     public CommentListDto getParentComments(@PathVariable("bookId") Long bookId) {
@@ -54,6 +57,20 @@ public class CommentController {
         return new ResponseEntity<>(new CommentResponseDto(commentService.findById(savedId)), HttpStatus.CREATED);
     }
 
+    // 댓글 수정
+    @PatchMapping("/{bookId}/{commentId}")
+    public CommentResponseDto updateParentComment(@AuthenticationPrincipal UserAdapter adapter,
+                                                  @PathVariable("bookId") Long bookId, @PathVariable("commentId") Long commentId,
+                                                  @RequestBody CommentRequestDto commentRequestDto) {
+
+        commentService.updateComment(commentId, adapter.getMember(), commentRequestDto.getContent(), commentRequestDto.getStar());
+
+        return new CommentResponseDto(commentService.findById(commentId));
+    }
+
+
+    //== 자식 댓글 ==///
+
     // 한 댓글의 대댓글 조회
     @GetMapping("/{bookId}/{commentId}")
     public CommentListDto getChildrenComments(@PathVariable("bookId") Long bookId, @PathVariable("commentId") Long commentId) {
@@ -64,7 +81,6 @@ public class CommentController {
                 .collect(Collectors.toList());
 
         return new CommentListDto(comments);
-
     }
 
     // 대댓글 달기
