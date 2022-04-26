@@ -2,7 +2,6 @@ package hello.ebookstore.dto;
 
 import hello.ebookstore.entity.Cart;
 import hello.ebookstore.entity.CartItem;
-import hello.ebookstore.entity.Member;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -35,12 +34,14 @@ public class CartDto {
         private String title;
         private String author;
         private int price;
+        private String imgUrl;
 
         public CartItemDto(CartItem cartItem) {
             bookId = cartItem.getBook().getId();
             title = cartItem.getBook().getTitle();
             author = cartItem.getBook().getAuthor();
             price = cartItem.getBook().getPrice();
+            imgUrl = cartItem.getBook().getImgUrl();
         }
     }
 
