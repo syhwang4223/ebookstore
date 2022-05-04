@@ -41,7 +41,7 @@ public class MemberController {
     }
 
 
-    @GetMapping("/validate/login-id")
+    @PostMapping("/validate/login-id")
     public ResponseEntity<ResponseMessage> validateLoginId(@RequestBody Map<String, String> loginId) {
         Boolean exist = memberService.isExistLoginId(loginId.get("loginId"));
         String message = exist ? "이미 사용중인 아이디입니다" : "사용 가능한 아이디입니다";
@@ -49,7 +49,7 @@ public class MemberController {
         return ResponseEntity.ok(new ResponseMessage(message));
     }
 
-    @GetMapping("/validate/email")
+    @PostMapping("/validate/email")
     public ResponseEntity<ResponseMessage> validateEmail(@RequestBody Map<String, String> email) {
         Boolean exist = memberService.isExistEmail(email.get("email"));
         String message = exist ? "이미 사용중인 이메일 주소입니다" : "사용 가능한 이메일 주소입니다";
