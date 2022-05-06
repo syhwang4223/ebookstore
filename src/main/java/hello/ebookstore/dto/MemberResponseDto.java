@@ -11,12 +11,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MemberResponseDto {
+
+    private Long id;
     private String loginId;
     private String emailAddress;
     private LocalDateTime joinDate;
 
     public MemberResponseDto(Member member) {
-
+        id = member.getId();
         loginId = member.getLoginId();
         emailAddress = member.getEmailAddress();
         joinDate = member.getJoinDate();
