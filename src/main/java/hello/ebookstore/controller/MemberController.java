@@ -62,8 +62,8 @@ public class MemberController {
      * 현재 로그인 중인 회원 정보 조회
      */
     @GetMapping("/myInfo")
-    public ResponseEntity<MemberResponseDto> getMyInfo() {
-        return ResponseEntity.ok(memberService.getMyInfo());
+    public MemberResponseDto getMyInfo(@AuthenticationPrincipal UserAdapter adapter) {
+        return new MemberResponseDto(adapter.getMember());
     }
 
 
@@ -73,10 +73,10 @@ public class MemberController {
 
     // 카트에 책 담기
     @PostMapping("/cart/{bookId}")
-    public String addToCart(@AuthenticationPrincipal UserAdapter adapter, @PathVariable Long bookId) {
+    public ResponseMessage addToCart(@AuthenticationPrincipal UserAdapter adapter, @PathVariable Long bookId) {
         Member loginMember = adapter.getMember();
         CartItem savedItem = cartService.addToCart(bookId, loginMember);
-        return "ok";
+        return new ResponseMessage("카트에 담았습니다.");
     }
 
     // 카트에 있는 책인지 판별
@@ -105,10 +105,10 @@ public class MemberController {
     // 카트에서 책 삭제
     @DeleteMapping("/cart/{bookId}")
 
-    public String outFromCart(@AuthenticationPrincipal UserAdapter adapter, @PathVariable Long bookId) {
+    public ResponseMessage outFromCart(@AuthenticationPrincipal UserAdapter adapter, @PathVariable Long bookId) {
         Member loginMember = adapter.getMember();
         cartService.outFromCart(bookId, loginMember);
-        return "ok";
+        return new ResponseMessage("카트에서 삭제되었습니다.");
     }
 
     // 카트에 담긴 책 목록 조회
