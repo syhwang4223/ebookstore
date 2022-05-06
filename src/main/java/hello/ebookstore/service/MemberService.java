@@ -99,15 +99,4 @@ public class MemberService {
     }
 
 
-    /**
-     * 현재 로그인한 회원 정보 조회
-     * (현재 SecurityContext에 있는 유저 정보 가져오기)
-     */
-    public MemberResponseDto getMyInfo() {
-        return memberRepository.findOne(SecurityUtil.getCurrentMemberId())
-                .map(MemberResponseDto::new)
-                .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
-    }
-
-
 }
