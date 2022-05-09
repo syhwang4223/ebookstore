@@ -38,6 +38,6 @@ public class BookService {
     }
 
     public List<Book> getBestSeller() {
-        return bookRepository.findTop18();
+        return bookRepository.findTop10();
     }
 }

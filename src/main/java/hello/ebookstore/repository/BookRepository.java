@@ -34,10 +34,10 @@ public class BookRepository {
                 .getResultList();
     }
 
-    public List<Book> findTop18() {
+    public List<Book> findTop10() {
         return em.createQuery("select b from Book b" +
                 " order by b.cumulativeSales desc", Book.class)
-                .setMaxResults(18)
+                .setMaxResults(10)
                 .getResultList();
     }
 
