@@ -37,6 +37,7 @@ public class CartDto {
         private String imgUrl;
 
         public CartItemDto(CartItem cartItem) {
+            imgUrl = cartItem.getBook().getImgUrl();
             bookId = cartItem.getBook().getId();
             title = cartItem.getBook().getTitle();
             author = cartItem.getBook().getAuthor();
