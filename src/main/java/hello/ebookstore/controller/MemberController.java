@@ -27,7 +27,6 @@ public class MemberController {
     private final MemberService memberService;
     private final CartService cartService;
 
-
     @PostMapping("/signup")
     public ResponseEntity<MemberResponseDto> signup(@Valid @RequestBody SignUpRequestDto signUpRequestDto) {
         Member member = memberService.signup(signUpRequestDto);
