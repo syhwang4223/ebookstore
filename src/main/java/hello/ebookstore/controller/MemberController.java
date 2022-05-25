@@ -39,7 +39,6 @@ public class MemberController {
         return ResponseEntity.ok(memberService.login(loginRequestDto));
     }
 
-
     @PostMapping("/validate/login-id")
     public ResponseEntity<ResponseMessage> validateLoginId(@RequestBody Map<String, String> loginId) {
         Boolean exist = memberService.isExistLoginId(loginId.get("loginId"));
