@@ -76,7 +76,6 @@ public class CommentController {
 
         commentService.deleteComment(commentId, adapter.getMember());
         return new ResponseMessage("댓글이 삭제되었습니다");
-
     }
 
 
