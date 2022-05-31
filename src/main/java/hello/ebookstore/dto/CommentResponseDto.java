@@ -13,6 +13,7 @@ public class CommentResponseDto {
 
     private Long commentId;
     private String writer;
+    private Long writerId;
     private String content;
     
     // 대댓글에는 없음
@@ -25,6 +26,7 @@ public class CommentResponseDto {
     public CommentResponseDto(Comment comment) {
         commentId = comment.getId();
         writer = comment.getWriter().getLoginId();
+        writerId = comment.getWriter().getId();
         content = comment.getContent();
         writeDateTime = comment.getWriteDateTime();
 
