@@ -39,6 +39,10 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: '11'
+        
+    # (3) gradlew permission 부여
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
 
     # (3) Gradle build (Test 제외)
     - name: Build with Gradle
