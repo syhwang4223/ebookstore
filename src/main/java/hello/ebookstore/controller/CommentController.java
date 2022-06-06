@@ -52,6 +52,7 @@ public class CommentController {
     public ResponseEntity<CommentResponseDto> addParentComment(@AuthenticationPrincipal UserAdapter adapter,
                                                               @PathVariable("bookId") Long bookId,
                                                               @RequestBody CommentRequestDto commentRequestDto) {
+        log.debug("star = {}, content = {}", commentRequestDto.getStar(), commentRequestDto.getContent());
         Book book = bookService.findOne(bookId);
         Long savedId = commentService.addParentComment(commentRequestDto.getContent(), commentRequestDto.getStar(), adapter.getMember(), book);
 

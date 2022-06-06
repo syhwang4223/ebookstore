@@ -37,9 +37,13 @@ public class CommentService {
         if (commentRepository.findByBookIdAndMemberId(book, writer).isPresent()) {
             throw new BadRequestException("평점은 한 책에 한 번 씩만 남길 수 있습니다.");
         }
-        Comment comment = Comment.createComment(content, star, writer, book);
-        commentRepository.save(comment);
-        return comment.getId();
+        if (star == 1 || star == 2 || star == 3 || star == 4 || star == 5) {
+            Comment comment = Comment.createComment(content, star, writer, book);
+            commentRepository.save(comment);
+            return comment.getId();
+        } else {
+            throw new BadRequestException("별점은 1점, 2점, 3점, 4점, 5점 중 하나로만 남길 수 있습니다.");
+        }
     }
 
     // 수정
