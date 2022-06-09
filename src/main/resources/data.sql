@@ -75,6 +75,26 @@ insert into book (title, author, price, isbn, publication_date, publisher, img_u
     values ('코마상태', '구육', 78500, '5234282106321', '2002-01-19', '반짝', 'https://user-images.githubusercontent.com/85507868/163430568-f8bf1e8b-8e49-45ae-9bf4-66c7b0780a09.png', 4, 424, 1243, 312);
 
 
+-- 더미 데이터
+-- insert into book (title, author, price, isbn, publication_date, publisher, img_url, category_id, cumulative_sales, total_stars_sum, total_rated_count)
+--     values (concat('더미 책 데이터 ', 1), concat('작가', 1), 999, concat('1111111111', to_char(1, '009')), '2022-04-22', '출판사', 'https://user-images.githubusercontent.com/90035354/172607272-21b64c06-36e4-49fc-884c-a96d06b953bb.png', 4, 0, 0, 0);
+insert into book (title, author, price, isbn, publication_date, publisher, img_url, category_id, cumulative_sales, total_stars_sum, total_rated_count)
+    values ('더미 책 데이터 ', '작가', 999, '1111111111009', '2022-04-22', '출판사', 'https://user-images.githubusercontent.com/90035354/172607272-21b64c06-36e4-49fc-884c-a96d06b953bb.png', 4, 0, 0, 0);
+
+
+SET i=0;
+
+myloop: LOOP
+    SET i=i+1;
+    IF i=10 THEN
+        LEAVE myloop;
+    END IF;
+END LOOP myloop;
+
+insert into book (title, author, price, isbn, publication_date, publisher, img_url, category_id, cumulative_sales, total_stars_sum, total_rated_count)
+    values ('더미 책 데이터 ', '작가', 999, '1111111111009', '2022-04-22', '출판사', 'https://user-images.githubusercontent.com/90035354/172607272-21b64c06-36e4-49fc-884c-a96d06b953bb.png', 4, 0, 0, 0);
+
+
 --------------------------------------------------- 댓글 --------------------------------------------
 insert into comment (content, likes, star, book_id, member_id, write_date_time, parent_id)
     values ('결말이 좀 아쉬워요. 너무 허무하게 끝납니다.', 0, 5, 1, 1, '2018-06-19', null);
