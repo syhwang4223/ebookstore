@@ -82,17 +82,20 @@ insert into book (title, author, price, isbn, publication_date, publisher, img_u
     values ('더미 책 데이터 ', '작가', 999, '1111111111009', '2022-04-22', '출판사', 'https://user-images.githubusercontent.com/90035354/172607272-21b64c06-36e4-49fc-884c-a96d06b953bb.png', 4, 0, 0, 0);
 
 
-SET i=0;
+DELIMITER //
 
-myloop: LOOP
-    SET i=i+1;
-    IF i=10 THEN
-        LEAVE myloop;
-    END IF;
-END LOOP myloop;
+FOR i IN 1..100
+DO
+  insert into book (title, author, price, isbn, publication_date, publisher, img_url, category_id, cumulative_sales, total_stars_sum, total_rated_count)
+    values (concat('더미 책 데이터 ', i), concat('작가 ', i), 999, concat('1111111111', i), '2012-04-22', '출판사', 'https://user-images.githubusercontent.com/90035354/172607272-21b64c06-36e4-49fc-884c-a96d06b953bb.png', 4, 0, 0, 0);
+END FOR;
+//
 
-insert into book (title, author, price, isbn, publication_date, publisher, img_url, category_id, cumulative_sales, total_stars_sum, total_rated_count)
-    values ('더미 책 데이터 ', '작가', 999, '1111111111009', '2022-04-22', '출판사', 'https://user-images.githubusercontent.com/90035354/172607272-21b64c06-36e4-49fc-884c-a96d06b953bb.png', 4, 0, 0, 0);
+DELIMITER ;
+
+select * from book;
+
+
 
 
 --------------------------------------------------- 댓글 --------------------------------------------
