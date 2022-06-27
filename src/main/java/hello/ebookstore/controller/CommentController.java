@@ -28,7 +28,6 @@ public class CommentController {
 
     private final CommentService commentService;
     private final BookService bookService;
-
     
     //== 부모 댓글 ==///
     
