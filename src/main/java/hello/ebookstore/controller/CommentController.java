@@ -30,7 +30,8 @@ public class CommentController {
     private final BookService bookService;
     
     //== 부모 댓글 ==///
-    
+
+
     // 한 책에 대한 댓글 조회
     @GetMapping("/{bookId}")
     public CommentListDto getParentComments(@AuthenticationPrincipal UserAdapter adapter, @PathVariable("bookId") Long bookId) {
