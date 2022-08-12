@@ -30,7 +30,7 @@ public class CartService {
 
     @Transactional
     public CartItem addToCart(Long bookId, Member loginMember) {
-        Book book = bookRepository.findOne(bookId).orElseThrow(() -> new BadRequestException("존재하지 않는 책입니다. bookId = " + bookId));
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new BadRequestException("존재하지 않는 책입니다. bookId = " + bookId));
         Cart cart = cartRepository.findByMember(loginMember);
         if (isExistInCart(bookId, cart)) {
             throw new BadRequestException("이미 카트에 존재하는 책입니다.");
@@ -42,7 +42,7 @@ public class CartService {
     }
 
     public Boolean isExistInCart(Long bookId, Cart cart) {
-        Book book = bookRepository.findOne(bookId).orElseThrow(() -> new BadRequestException("존재하지 않는 책입니다. bookId = " + bookId));
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new BadRequestException("존재하지 않는 책입니다. bookId = " + bookId));
 
         for (CartItem item : cart.getCartItems()) {
             if (item.getBook().getId().equals(bookId)) {

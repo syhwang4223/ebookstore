@@ -9,7 +9,6 @@ import hello.ebookstore.exception.LoginFailException;
 import hello.ebookstore.jwt.TokenProvider;
 import hello.ebookstore.repository.CartRepository;
 import hello.ebookstore.repository.MemberRepository;
-import hello.ebookstore.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -58,7 +57,7 @@ public class MemberService {
 
     private void validateDuplicateMember(SignUpRequestDto signUpRequestDto) {
         Optional<Member> byLoginId = memberRepository.findByLoginId(signUpRequestDto.getLoginId());
-        Optional<Member> byEmail = memberRepository.findByEmail(signUpRequestDto.getEmailAddress());
+        Optional<Member> byEmail = memberRepository.findByEmailAddress(signUpRequestDto.getEmailAddress());
         if (byLoginId.isPresent() | byEmail.isPresent()) {
             throw new DuplicateException("중복 아이디 또는 이메일이 존재합니다.");
         }
@@ -70,7 +69,7 @@ public class MemberService {
     }
 
     public Boolean isExistEmail(String email) {
-        return memberRepository.findByEmail(email).isPresent();
+        return memberRepository.findByEmailAddress(email).isPresent();
     }
 
     /**

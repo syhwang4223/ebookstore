@@ -2,43 +2,12 @@ package hello.ebookstore.repository;
 
 import hello.ebookstore.entity.Book;
 import hello.ebookstore.entity.Category;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-
-import javax.persistence.EntityManager;
+import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
-import java.util.Optional;
+public interface BookRepository extends JpaRepository<Book, Long> {
 
-@Repository
-@RequiredArgsConstructor
-public class BookRepository {
+    List<Book> findByCategory(Category category);
 
-    private final EntityManager em;
-
-    public void save(Book book) {
-        em.persist(book);
-    }
-
-    public Optional<Book> findOne(Long id) {
-        return Optional.of(em.find(Book.class, id));
-    }
-
-    public List<Book> findAll() {
-        return em.createQuery("select b from Book b", Book.class)
-                .getResultList();
-    }
-
-    public List<Book> findByCategory(Category category) {
-        return em.createQuery("select b from Book b join b.category c where c.id =: categoryId", Book.class)
-                .setParameter("categoryId", category.getId())
-                .getResultList();
-    }
-
-    public List<Book> findTop10() {
-        return em.createQuery("select b from Book b" +
-                " order by b.cumulativeSales desc", Book.class)
-                .setMaxResults(10)
-                .getResultList();
-    }
+    List<Book> findTop10ByOrderByCumulativeSalesDesc();
 
 }

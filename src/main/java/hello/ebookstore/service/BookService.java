@@ -30,7 +30,7 @@ public class BookService {
     }
 
     public Book findOne(Long id) {
-        return bookRepository.findOne(id).orElseThrow(() -> new BadRequestException("존재하지 않는 책입니다: bookId = " + id));
+        return bookRepository.findById(id).orElseThrow(() -> new BadRequestException("존재하지 않는 책입니다: bookId = " + id));
     }
 
     public List<Book> findByCategory(Category category) {
@@ -38,6 +38,6 @@ public class BookService {
     }
 
     public List<Book> getBestSeller() {
-        return bookRepository.findTop10();
+        return bookRepository.findTop10ByOrderByCumulativeSalesDesc();
     }
 }
