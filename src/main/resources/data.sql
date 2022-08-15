@@ -99,15 +99,15 @@ insert into book (title, author, price, isbn, publication_date, publisher, img_u
 
 
 --------------------------------------------------- 댓글 --------------------------------------------
-insert into comment (content, likes, star, book_id, member_id, write_date_time, parent_id)
-    values ('결말이 좀 아쉬워요. 너무 허무하게 끝납니다.', 0, 5, 1, 1, '2018-06-19', null);
-insert into comment (content, likes, star, book_id, member_id, write_date_time, parent_id)
-    values ('재밌읍니다 김밥 한 줄 놓고 가용 ^^ @)))))', 0, 4, 1, 2, '2018-06-20', null);
-insert into comment (content, likes, star, book_id, member_id, write_date_time, parent_id)
-    values ('엥 로맨스 카테인데 로미오와 로미오면 남장물인가?', 0, 5, 1, 3, '2021-11-05', null);
+insert into comment (content, likes, star, book_id, member_id, parent_id)
+    values ('결말이 좀 아쉬워요. 너무 허무하게 끝납니다.', 0, 5, 1, 1, null);
+insert into comment (content, likes, star, book_id, member_id, parent_id)
+    values ('재밌읍니다 김밥 한 줄 놓고 가용 ^^ @)))))', 0, 4, 1, 2, null);
+insert into comment (content, likes, star, book_id, member_id, parent_id)
+    values ('엥 로맨스 카테인데 로미오와 로미오면 남장물인가?', 0, 5, 1, 3, null);
 
 
-insert into comment (content, likes, star, book_id, member_id, write_date_time, parent_id)
-    values ('네 남장물 맞아여ㅋㅋㅋ', 0, 0, 1, 1, '2021-11-05', 3);
+insert into comment (content, likes, star, book_id, member_id, parent_id)
+    values ('네 남장물 맞아여ㅋㅋㅋ', 0, 0, 1, 1, 3);
 
 
