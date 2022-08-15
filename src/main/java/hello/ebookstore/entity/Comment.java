@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Getter @Setter
 @RequiredArgsConstructor
-public class Comment {
+public class Comment extends BaseTimeEntity{
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
@@ -27,8 +27,6 @@ public class Comment {
     private Member writer;
 
     private String content;
-
-    private LocalDateTime writeDateTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
@@ -62,7 +60,6 @@ public class Comment {
         comment.setWriter(writer);
         comment.setBook(book);
         comment.setLike(0);
-        comment.writeDateTime = LocalDateTime.now();
 
         book.addStar(star);
 

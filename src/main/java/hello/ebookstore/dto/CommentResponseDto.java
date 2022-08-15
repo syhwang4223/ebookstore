@@ -28,7 +28,6 @@ public class CommentResponseDto {
         writer = comment.getWriter().getLoginId();
         writerId = comment.getWriter().getId();
         content = comment.getContent();
-        writeDateTime = comment.getWriteDateTime();
 
         // 대댓글에는 없음
         star = comment.getStar();
