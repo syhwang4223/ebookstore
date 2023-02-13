@@ -42,7 +42,7 @@ public class CommentController {
                 .map(CommentResponseDto::new)
                 .collect(Collectors.toList());
 
-        return new CommentListDto(comments, adapter.getMember());
+        return new CommentListDto(comments);
 
     }
 
@@ -113,14 +113,10 @@ public class CommentController {
     @Getter
     private static class CommentListDto {
 
-        // TO-DO
-        // 내가 남긴 댓글이 있으면 그걸 같이 반환, 없으면 빈값 반환하게 하고 싶음
-        private CommentResponseDto myComment; 
         private int totalCount;
         private List<CommentResponseDto> comments = new ArrayList<>();
 
-        public CommentListDto(List<CommentResponseDto> comments, Member member) {
-            log.debug(member.getLoginId());
+        public CommentListDto(List<CommentResponseDto> comments) {
             totalCount = comments.size();
             this.comments = comments;
         }

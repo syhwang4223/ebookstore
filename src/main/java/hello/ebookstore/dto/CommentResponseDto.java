@@ -33,5 +33,6 @@ public class CommentResponseDto {
         star = comment.getStar();
         like = comment.getLike();
         childrenCount = comment.getChildren().size();
+        writeDateTime = comment.getCreatedDateTime();
     }
 }
